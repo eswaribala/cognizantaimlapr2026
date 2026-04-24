@@ -1,0 +1,398 @@
+1. Customer Age Validation
+
+Scenario:
+A bank wants to register customers for a savings account. Only customers aged 18 or above are allowed.
+
+Task:
+Write a Python program to accept customer name and age. Display whether the customer is eligible.
+
+Hint:
+Use input(), int(), and if-else.
+
+2. Shopping Bill Calculator
+
+Scenario:
+A supermarket wants to generate customer bills.
+
+Task:
+Accept product price and quantity. Calculate total amount. Apply 10% discount if total is above ₹5000.
+
+Hint:
+Use arithmetic operators and conditional statements.
+
+3. Student Grade Calculator
+
+Scenario:
+A school wants to calculate grades based on marks.
+
+Task:
+Accept marks for 5 subjects. Calculate total, average, and grade.
+
+Hint:
+Use sum(), list, and if-elif-else.
+
+4. Login Attempt System
+
+Scenario:
+An application allows only 3 login attempts.
+
+Task:
+Store a username and password. Allow the user to try login up to 3 times.
+
+Hint:
+Use a for loop and break.
+
+5. Employee Email Generator
+
+Scenario:
+A company wants to generate official email IDs.
+
+Task:
+Accept first name, last name, and company domain. Generate email like:
+firstname.lastname@company.com
+
+Hint:
+Use string methods like .lower() and string formatting.
+
+6. Bank Simple Interest Calculator
+
+Scenario:
+A bank wants to calculate simple interest for fixed deposits.
+
+Task:
+Accept principal, rate, and time. Calculate simple interest and final amount.
+
+Hint:
+Formula: SI = (P * R * T) / 100
+
+7. BMI Calculator
+
+Scenario:
+A health app wants to classify users based on BMI.
+
+Task:
+Accept weight in kg and height in meters. Calculate BMI and classify as underweight, normal, overweight, or obese.
+
+Hint:
+Formula: BMI = weight / height ** 2
+
+8. Parking Charge Calculator
+
+Scenario:
+A mall parking system charges based on hours parked.
+
+Task:
+First 2 hours cost ₹50. Every extra hour costs ₹20. Calculate total charge.
+
+Hint:
+Use if hours <= 2, else calculate extra hours.
+
+9. Temperature Converter
+
+Scenario:
+A weather app needs Celsius to Fahrenheit conversion.
+
+Task:
+Accept temperature in Celsius and convert it to Fahrenheit.
+
+Hint:
+Formula: F = (C * 9/5) + 32
+
+10. Password Strength Checker
+
+Scenario:
+A cybersecurity team wants to check password strength.
+
+Task:
+Check whether a password has at least 8 characters, one digit, and one uppercase letter.
+
+Hint:
+Use len(), .isdigit(), .isupper(), and loops.
+
+11. Customer Record Using Dictionary
+
+Scenario:
+A CRM system wants to store customer details.
+
+Task:
+Create a dictionary with customer ID, name, email, and phone number. Display customer details.
+
+Hint:
+Use key-value pairs.
+
+12. Product Inventory Management
+
+Scenario:
+A shop wants to maintain product stock.
+
+Task:
+Store product names and quantities in a dictionary. Update stock after a sale.
+
+Hint:
+Use dictionary update:
+inventory["Rice"] -= quantity
+
+13. Library Book Issue System
+
+Scenario:
+A library wants to track available books.
+
+Task:
+Store a list of books. Allow the user to issue a book if it is available.
+
+Hint:
+Use list membership:
+if book in books
+
+14. Restaurant Menu Ordering
+
+Scenario:
+A restaurant wants a simple order system.
+
+Task:
+Store menu items with prices. Accept customer order and calculate total bill.
+
+Hint:
+Use a dictionary like:
+{"Idly": 30, "Dosa": 50}
+
+15. Attendance Percentage Calculator
+
+Scenario:
+A college wants to check student exam eligibility.
+
+Task:
+Accept total classes and attended classes. Calculate attendance percentage. Eligible if attendance is 75% or more.
+
+Hint:
+Formula:
+percentage = attended / total * 100
+
+16. CSV Employee Data Reader
+
+Scenario:
+HR has employee data in CSV format.
+
+Task:
+Read employee data using pandas and display employee names and departments.
+
+Hint:
+Use:
+pd.read_csv("employees.csv")
+
+17. Department-Wise Employee Count
+
+Scenario:
+HR wants to know how many employees are in each department.
+
+Task:
+Read CSV data and count employees department-wise.
+
+Hint:
+Use pandas:
+df["department"].value_counts()
+
+18. Missing Value Cleaner
+
+Scenario:
+A data science team receives customer data with missing values.
+
+Task:
+Load a CSV file and replace missing age values with average age.
+
+Hint:
+Use:
+df["age"].fillna(df["age"].mean())
+
+19. Duplicate Customer Detector
+
+Scenario:
+A bank wants to remove duplicate customer records.
+
+Task:
+Read customer data and remove duplicate rows.
+
+Hint:
+Use:
+df.drop_duplicates()
+
+20. Sales Summary Report
+
+Scenario:
+A retail company wants a sales report.
+
+Task:
+Read sales data with product, quantity, and price. Calculate total sales amount.
+
+Hint:
+Create a new column:
+df["total"] = df["quantity"] * df["price"]
+
+21. Top 5 Selling Products
+
+Scenario:
+A supermarket wants to find its best-selling products.
+
+Task:
+Group sales data by product and display top 5 products by quantity sold.
+
+Hint:
+Use:
+groupby() and sort_values()
+
+22. Expense Category Summary
+
+Scenario:
+A finance team wants to analyze monthly expenses.
+
+Task:
+Read expense data and calculate total expense category-wise.
+
+Hint:
+Use:
+df.groupby("category")["amount"].sum()
+
+23. Word Frequency Counter
+
+Scenario:
+A text analytics team wants to analyze customer reviews.
+
+Task:
+Accept a paragraph and count how many times each word appears.
+
+Hint:
+Use .split() and dictionary counting.
+
+24. Hashtag Counter
+
+Scenario:
+A social media app wants to count hashtags in posts.
+
+Task:
+Accept a post and extract all words starting with #.
+
+Hint:
+Use:
+word.startswith("#")
+
+25. Complaint Category Counter
+
+Scenario:
+Customer support wants to count complaints by category.
+
+Task:
+Store complaints like billing, delivery, refund, and service. Count each category.
+
+Hint:
+Use dictionary or collections.Counter.
+
+26. JSON Patient Record System
+
+Scenario:
+A clinic wants to save patient records in JSON format.
+
+Task:
+Accept patient name, age, disease, and doctor name. Save the record into a JSON file.
+
+Hint:
+Use json.dump().
+
+27. Read Patient Records from JSON
+
+Scenario:
+The clinic wants to view stored patient records.
+
+Task:
+Read patient details from a JSON file and display them.
+
+Hint:
+Use json.load().
+
+28. Error Logging System
+
+Scenario:
+An application wants to save error messages into a log file.
+
+Task:
+Write a program that handles division by zero and logs the error into a file.
+
+Hint:
+Use try-except and file handling.
+
+29. Bank Transaction Class
+
+Scenario:
+A bank wants to manage customer accounts using OOP.
+
+Task:
+Create an Account class with deposit, withdraw, and balance check methods.
+
+Hint:
+Use class, __init__(), and instance variables.
+
+30. Student Class with Marks
+
+Scenario:
+A school wants to manage student results using OOP.
+
+Task:
+Create a Student class with name, marks, total, average, and grade methods.
+
+Hint:
+Use methods inside a class.
+
+31. Hotel Room Booking System
+
+Scenario:
+A hotel wants to manage room availability.
+
+Task:
+Create a class Hotel with available rooms. Book a room if available.
+
+Hint:
+Use list or dictionary inside a class.
+
+32. Movie Recommendation System
+
+Scenario:
+A movie app wants to recommend movies based on genre.
+
+Task:
+Create a dictionary where genres are keys and movie lists are values. Ask user for genre and show movies.
+
+Hint:
+Example:
+{"comedy": ["Movie1", "Movie2"]}
+
+33. Product Recommendation System
+
+Scenario:
+An e-commerce app wants to recommend products based on previous purchase.
+
+Task:
+If user buys a phone, recommend case, charger, and earphones.
+
+Hint:
+Use dictionary mapping.
+
+34. Loan Eligibility Checker
+
+Scenario:
+A bank wants to check loan eligibility.
+
+Task:
+Accept income, credit score, and existing loan amount. Decide whether the applicant is eligible.
+
+Hint:
+Use nested conditions.
+
+35. Fraud Transaction Detector
+
+Scenario:
+A bank wants to flag suspicious transactions.
+
+Task:
+Given a list of transactions, flag transactions above ₹100000.
+
+Hint:
+Use a loop and if amount > 100000.
