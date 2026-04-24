@@ -9,6 +9,7 @@ class Config:
         self.mysql_user = os.getenv("mysql_user")
         self.mysql_password = os.getenv("mysql_password")
         self.database = os.getenv("database")
+        self.conn_string=self.get_connection_string()
 
     def get_connection_string(self):
         app_env = os.getenv("APP_ENV")
