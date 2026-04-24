@@ -1,166 +1,22 @@
-🔹 Scenario 1: Product Creation with Validation
+🛒 End-to-End E-Commerce Scenario (Python + MySQL)
+🎯 Business Context
 
-Problem:
-An admin tries to add a product, but sometimes invalid data is entered (negative price, empty name).
+You are building the backend for an e-commerce platform similar to Amazon or Flipkart.
 
-Question:
-How will you design a Python function to:
+The system must handle:
 
-Insert a product into MySQL
-Validate:
-price > 0
-stock ≥ 0
-product name not empty
+Product catalog
+Customer orders
+Inventory management
+Payments (simulated)
+🔹 Core Scenario
+🧩 Problem Statement
 
-Expectation:
+A customer places an order for multiple products. Your system must:
 
-Input validation before DB call
-Exception handling
-Parameterized query
-🔹 Scenario 2: Prevent Duplicate Products
-
-Problem:
-Multiple admins accidentally insert the same product twice.
-
-Question:
-How will you prevent duplicate product entries based on product_name?
-
-Expectation:
-
-UNIQUE constraint OR pre-check query
-Handle DB exception gracefully
-🔹 Scenario 3: Efficient Product Listing (Performance)
-
-Problem:
-The products table has 1 million records, and listing all products is slow.
-
-Question:
-How will you optimize the read operation?
-
-Expectation:
-
-Pagination (LIMIT, OFFSET)
-Indexing
-Avoid SELECT *
-🔹 Scenario 4: Update with Concurrency Issue
-
-Problem:
-Two admins update the same product stock simultaneously → incorrect stock.
-
-Question:
-How do you handle this?
-
-Expectation:
-
-Transactions
-Row-level locking (SELECT ... FOR UPDATE)
-Optimistic locking (version column)
-🔹 Scenario 5: Soft Delete vs Hard Delete
-
-Problem:
-Deleting products permanently causes audit issues.
-
-Question:
-How would you redesign delete operation?
-
-Expectation:
-
-Add is_deleted flag
-Use soft delete
-Modify SELECT queries
-🔹 Scenario 6: Order Placement (Multi-table Transaction)
-
-Problem:
-When a customer places an order:
-
-Insert into orders
-Reduce product stock
-
-If one fails → rollback needed.
-
-Question:
-How will you implement this?
-
-Expectation:
-
-Transactions (commit, rollback)
-ACID properties
-Error handling
-🔹 Scenario 7: SQL Injection Prevention
-
-Problem:
-User input is directly used in queries.
-
-Question:
-How will you secure your CRUD operations?
-
-Expectation:
-
-Parameterized queries (%s)
-Never use string concatenation
-🔹 Scenario 8: Bulk Insert Optimization
-
-Problem:
-You need to insert 10,000 products quickly.
-
-Question:
-How will you optimize?
-
-Expectation:
-
-executemany()
-Batch inserts
-Disable autocommit temporarily
-🔹 Scenario 9: API Integration Scenario
-
-Problem:
-Your CRUD logic is exposed via REST API.
-
-Question:
-How will you structure your Python code?
-
-Expectation:
-
-Layered architecture:
-Controller
-Service
-Repository
-Use frameworks like Flask or FastAPI
-🔹 Scenario 10: Logging and Monitoring
-
-Problem:
-Production issue: product updates are failing randomly.
-
-Question:
-How will you debug?
-
-Expectation:
-
-Logging (query + errors)
-Retry mechanism
-Monitoring
-🔹 Scenario 11: Data Consistency Check
-
-Problem:
-Stock becomes negative due to bugs.
-
-Question:
-How will you prevent this at DB level?
-
-Expectation:
-
-CHECK constraint (stock >= 0)
-Validation in code + DB
-🔹 Scenario 12: High Traffic Read Optimization
-
-Problem:
-Product listing API is hit thousands of times per second.
-
-Question:
-How to scale reads?
-
-Expectation:
-
-Caching (Redis)
-Read replicas
-CDN (if applicable)
+Check if all products exist
+Verify sufficient stock
+Deduct stock
+Create an order
+Insert order items
+Ensure data consistency (all succeed or fail together)
