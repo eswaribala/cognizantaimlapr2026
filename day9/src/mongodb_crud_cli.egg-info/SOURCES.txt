@@ -1,0 +1,11 @@
+pyproject.toml
+src/bankingapp/__init__.py
+src/bankingapp/configurations/__init__.py
+src/bankingapp/configurations/conf.py
+src/bankingapp/utils/__init__.py
+src/bankingapp/utils/app.py
+src/mongodb_crud_cli.egg-info/PKG-INFO
+src/mongodb_crud_cli.egg-info/SOURCES.txt
+src/mongodb_crud_cli.egg-info/dependency_links.txt
+src/mongodb_crud_cli.egg-info/requires.txt
+src/mongodb_crud_cli.egg-info/top_level.txt

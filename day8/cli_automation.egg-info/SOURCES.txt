@@ -1,0 +1,6 @@
+pyproject.toml
+cli_automation.egg-info/PKG-INFO
+cli_automation.egg-info/SOURCES.txt
+cli_automation.egg-info/dependency_links.txt
+cli_automation.egg-info/requires.txt
+cli_automation.egg-info/top_level.txt

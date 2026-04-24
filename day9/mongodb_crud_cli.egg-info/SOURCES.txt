@@ -1,0 +1,6 @@
+pyproject.toml
+mongodb_crud_cli.egg-info/PKG-INFO
+mongodb_crud_cli.egg-info/SOURCES.txt
+mongodb_crud_cli.egg-info/dependency_links.txt
+mongodb_crud_cli.egg-info/requires.txt
+mongodb_crud_cli.egg-info/top_level.txt

@@ -1,0 +1,10 @@
+pyproject.toml
+src/cli_automation/__init__.py
+src/cli_automation/clickdemo.py
+src/cli_automation/testmongo.py
+src/cli_automation/typerdemo.py
+src/cli_automation.egg-info/PKG-INFO
+src/cli_automation.egg-info/SOURCES.txt
+src/cli_automation.egg-info/dependency_links.txt
+src/cli_automation.egg-info/requires.txt
+src/cli_automation.egg-info/top_level.txt

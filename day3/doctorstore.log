@@ -1,0 +1,19 @@
+2026-04-17 05:07:28 - doctorstore - INFO - Adding doctor: Doctor(id=3178, name='Richard Sherman', specialization='Teacher, adult education')
+2026-04-17 05:07:28 - doctorstore - INFO - Fetching doctor with ID: 3178
+2026-04-17 05:07:28 - doctorstore - INFO - Fetching doctor with ID: 3178
+2026-04-17 05:07:53 - doctorstore - INFO - Adding doctor: Doctor(id=2804, name='Trevor Torres', specialization='Education officer, museum')
+2026-04-17 05:07:53 - doctorstore - INFO - Fetching doctor with ID: 2804
+2026-04-17 05:07:53 - doctorstore - INFO - Fetching doctor with ID: 2804
+2026-04-17 05:08:57 - doctorstore - INFO - Adding doctor: Doctor(id=6154, name='Cameron Boyer', specialization='Clinical cytogeneticist')
+2026-04-17 05:08:57 - doctorstore - INFO - Fetching doctor with ID: 6154
+2026-04-17 05:08:57 - doctorstore - INFO - Fetching doctor with ID: 6154
+2026-04-17 05:50:08 - doctorstore - INFO - Adding doctor: Doctor(id=7681, name='Scott Daugherty', specialization='Acupuncturist')
+2026-04-17 05:50:08 - doctorstore - INFO - Fetching doctor with ID: 7681
+2026-04-17 05:50:08 - doctorstore - INFO - Fetching doctor with ID: 7681
+2026-04-17 06:12:37 - doctorstore - INFO - Adding doctor: Doctor(id=2917, name='Amanda Garcia', specialization='Merchandiser, retail')
+2026-04-17 06:12:37 - doctorstore - INFO - Fetching doctor with ID: 2917
+2026-04-17 06:12:37 - doctorstore - INFO - Fetching doctor with ID: 2917
+2026-04-17 06:29:36 - doctorstore - INFO - Fetching doctor with ID: 9999
+2026-04-17 06:29:45 - doctorstore - INFO - Fetching doctor with ID: 9999
+2026-04-17 06:30:57 - doctorstore - INFO - Fetching doctor with ID: 9999
+2026-04-17 10:50:23 - doctorstore - INFO - Fetching doctor with ID: 999
