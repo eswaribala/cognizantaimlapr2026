@@ -1,4 +1,5 @@
 #create customer respository implementation
+from ecommerce.dtos.customer_request import CustomerRequest
 from ecommerce.models.customer import Customer
 from ecommerce.models.full_name import FullName
 from ecommerce.repository.customer_repository import CustomerRepository
@@ -6,28 +7,31 @@ from ecommerce.configurations.mysql_conn import MySQLConnection
 from datetime import datetime
 class CustomerRepositoryImpl(CustomerRepository): 
 
-    def create_customer(self, customer_request):
+    def create_customer(self, customer_request:CustomerRequest):
         session=MySQLConnection.get_session()
         #converting customer request to customer model
         #converting full name request to full name model
         try:
             full_name=FullName(
-                first_name=customer_request.first_name,
-                last_name=customer_request.last_name
+                first_name=customer_request.full_name.first_name,
+                last_name=customer_request.full_name.last_name
             )
             customer=Customer(
                 full_name=full_name,
                 email=customer_request.email,
                 password=customer_request.password,
                 created_at=datetime.now(),
-                updated_at=datetime.now()
-                
+                updated_at=datetime.now()               
 
             )
             #insert customer into database
             session.add(customer)
             #commit the transaction
-            session.commit()
+            session.commit()            
+            session.refresh(customer)
+            print(f"Customer created with ID: {customer}")
+            return customer
+           
         except Exception as e:
             #rollback the transaction in case of error
             session.rollback()
@@ -36,7 +40,7 @@ class CustomerRepositoryImpl(CustomerRepository):
             #close the session
             session.close()
 
-        return customer
+        
    
     def get_all_customers(self):
         session=MySQLConnection.get_session()
