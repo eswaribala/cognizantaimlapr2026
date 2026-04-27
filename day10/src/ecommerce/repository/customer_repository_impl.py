@@ -7,48 +7,33 @@ from ecommerce.configurations.mysql_conn import MySQLConnection
 from datetime import datetime
 class CustomerRepositoryImpl(CustomerRepository): 
 
-    def create_customer(self, customer_request:CustomerRequest):
-        session=MySQLConnection.get_session()
-        #converting customer request to customer model
-        #converting full name request to full name model
-        try:
-            full_name=FullName(
-                first_name=customer_request.full_name.first_name,
-                last_name=customer_request.full_name.last_name
-            )
-            customer=Customer(
-                full_name=full_name,
-                email=customer_request.email,
-                password=customer_request.password,
+     def create_customer(self, customer:CustomerRequest):
+          session = MySQLConnection.get_session()
+          try:
+                customer=Customer(
+                first_name=customer.full_name.first_name,
+                last_name=customer.full_name.last_name,
+                email=customer.email,
+                password=customer.password,
                 created_at=datetime.now(),
-                updated_at=datetime.now()               
-
+                updated_at= datetime.now()
             )
-            #insert customer into database
-            session.add(customer)
-            #commit the transaction
-            session.commit()            
-            session.refresh(customer)
-            print(f"Customer created with ID: {customer}")
-            return customer
-           
-        except Exception as e:
-            #rollback the transaction in case of error
-            session.rollback()
-            print(f"Error creating customer: {e}")
-        finally:
-            #close the session
-            session.close()
-
+                session.add(customer)
+                session.commit()
+                session.refresh(customer)
+                return customer                 
+          except Exception as e:
+                session.rollback()
+                raise e
+          finally:
+                session.close()
         
-   
-    def get_all_customers(self):
-        session=MySQLConnection.get_session()
-        try:
-            customers=session.query(Customer).all()
-            return customers
-        except Exception as e:
-            print(f"Error fetching customers: {e}")
-            return []
-        finally:
-            session.close()
+     def get_all_customers(self):
+          session = MySQLConnection.get_session()
+          try:
+                customers = session.query(Customer).all()
+                return customers
+          except Exception as e:
+                raise e
+          finally:
+                session.close()

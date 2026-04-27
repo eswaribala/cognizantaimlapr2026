@@ -2,9 +2,11 @@
 
 from abc import ABC, abstractmethod
 
+from ecommerce.dtos.customer_request import CustomerRequest
+
 class CustomerRepository(ABC):
     @abstractmethod
-    def create_customer(self, customer_request):
+    def create_customer(self, customer_request:CustomerRequest):
         pass
 
     
