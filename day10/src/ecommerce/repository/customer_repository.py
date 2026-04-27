@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 class CustomerRepository(ABC):
     @abstractmethod
-    def create_customer(self, customer):
+    def create_customer(self, customer_request):
         pass
 
     @abstractmethod
@@ -14,7 +14,7 @@ class CustomerRepository(ABC):
     def get_all_customers(self):
         pass
     @abstractmethod
-    def update_customer(self, customer):
+    def update_customer(self, customer_request):
         pass
     @abstractmethod
     def delete_customer(self, customer_id):
