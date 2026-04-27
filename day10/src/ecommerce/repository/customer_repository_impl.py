@@ -10,24 +10,30 @@ class CustomerRepositoryImpl(CustomerRepository):
         session=MySQLConnection.get_session()
         #converting customer request to customer model
         #converting full name request to full name model
-        full_name=FullName(
-            first_name=customer_request.first_name,
-            last_name=customer_request.last_name
-        )
-        customer=Customer(
-            full_name=full_name,
-            email=customer_request.email,
-            password=customer_request.password,
-            created_at=datetime.now(),
-            updated_at=datetime.now()
-            
+        try:
+            full_name=FullName(
+                first_name=customer_request.first_name,
+                last_name=customer_request.last_name
+            )
+            customer=Customer(
+                full_name=full_name,
+                email=customer_request.email,
+                password=customer_request.password,
+                created_at=datetime.now(),
+                updated_at=datetime.now()
+                
 
-        )
-        #insert customer into database
-        session.add(customer)
-        #commit the transaction
-        session.commit()
-        #close the session
-        session.close()
+            )
+            #insert customer into database
+            session.add(customer)
+            #commit the transaction
+            session.commit()
+        except Exception as e:
+            #rollback the transaction in case of error
+            session.rollback()
+            print(f"Error creating customer: {e}")
+        finally:
+            #close the session
+            session.close()
 
         return customer
