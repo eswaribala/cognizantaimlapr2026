@@ -1,5 +1,7 @@
 #create customer service implementation class
+from ecommerce.dtos.customer_response import CustomerResponse
 from ecommerce.repository.customer_repository_impl import CustomerRepositoryImpl
+
 
 from .customer_service import CustomerService
 
@@ -10,14 +12,15 @@ class CustomerServiceImpl(CustomerService):
     def to_customer_response(self, customers):
         customer_responses = []
         for customer in customers:
-            customer_response = {
-                "id": customer.id,
-                "first_name": customer.full_name.first_name,
-                "last_name": customer.full_name.last_name,
-                "email": customer.email,
-                "created_at": customer.created_at,
-                "updated_at": customer.updated_at
-            }
+            customer_response = CustomerResponse(
+                id=customer.id,
+                first_name=customer.full_name.first_name,
+                last_name=customer.full_name.last_name,
+                email=customer.email,
+                created_at=customer.created_at,
+                updated_at=customer.updated_at
+
+            )
             customer_responses.append(customer_response)
         return customer_responses
 
