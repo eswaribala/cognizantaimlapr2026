@@ -12,11 +12,13 @@ class CustomerServiceImpl(CustomerService):
     def to_customer_response(self, customers):
         customer_responses = []
         for customer in customers:
+            #converting customer entity to customer response dto
             customer_response = CustomerResponse(
                 id=customer.id,
                 first_name=customer.full_name.first_name,
                 last_name=customer.full_name.last_name,
                 email=customer.email,
+                password=customer.password,
                 created_at=customer.created_at,
                 updated_at=customer.updated_at
 
