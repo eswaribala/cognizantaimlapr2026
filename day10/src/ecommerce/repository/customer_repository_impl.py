@@ -37,3 +37,31 @@ class CustomerRepositoryImpl(CustomerRepository):
                 raise e
           finally:
                 session.close()
+     def get_customer_by_id(self, customer_id:int):
+          session = MySQLConnection.get_session()
+          try:
+                customer = session.query(Customer).filter(Customer.id == customer_id).first()
+                return customer
+          except Exception as e:
+                raise e
+          finally:
+                session.close()
+
+     def update_customer(self, customer_id:int, customer_request:CustomerRequest):
+          session = MySQLConnection.get_session()
+          try:
+                customer = session.query(Customer).filter(Customer.id == customer_id).first()
+                if customer:
+                    customer.first_name = customer_request.full_name.first_name
+                    customer.last_name = customer_request.full_name.last_name
+                    customer.email = customer_request.email
+                    customer.password = customer_request.password
+                    customer.updated_at = datetime.now()
+                    session.commit()
+                    session.refresh(customer)
+                return customer
+          except Exception as e:
+                session.rollback()
+                raise e
+          finally:
+                session.close()

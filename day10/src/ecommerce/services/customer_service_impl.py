@@ -47,3 +47,37 @@ class CustomerServiceImpl(CustomerService):
                 
             )
         return customer_responses
+    
+    def get_customer_by_id(self, customer_id:int):
+        customer = self.customer_repository.get_customer_by_id(customer_id)
+        if customer:
+            return CustomerResponse(
+                id=customer.id,
+                full_name=FullNameRequest(
+                    first_name=customer.first_name,
+                    last_name=customer.last_name
+                ),
+                email=customer.email,
+                password=customer.password,
+                created_at=str(customer.created_at),
+                updated_at=str(customer.updated_at)
+            )
+        return None
+
+    def update_customer(self, customer_id:int, customer_request:CustomerRequest):
+        updated_customer = self.customer_repository.update_customer(customer_id, customer_request)
+        if updated_customer:
+            return CustomerResponse(
+                id=updated_customer.id,
+                full_name=FullNameRequest(
+                    first_name=updated_customer.first_name,
+                    last_name=updated_customer.last_name
+                ),
+                email=updated_customer.email,
+                password=updated_customer.password,
+                created_at=str(updated_customer.created_at),
+                updated_at=str(updated_customer.updated_at)
+            )
+        return None 
+    
+    

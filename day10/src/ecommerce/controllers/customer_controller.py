@@ -20,3 +20,11 @@ def create_customer(customer_data: CustomerRequest):
 def get_customers():
     return customer_service.get_all_customers()
 
+@router.get("/{customer_id}", status_code=200, response_model=CustomerResponse)
+def get_customer_by_id(customer_id:int):
+    return customer_service.get_customer_by_id(customer_id)
+
+@router.put("/{customer_id}", status_code=200, response_model=CustomerResponse)
+def update_customer(customer_id:int, customer_data:CustomerRequest):
+    return customer_service.update_customer(customer_id, customer_data)
+
