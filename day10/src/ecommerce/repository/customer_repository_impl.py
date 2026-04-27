@@ -37,3 +37,14 @@ class CustomerRepositoryImpl(CustomerRepository):
             session.close()
 
         return customer
+   
+    def get_all_customers(self):
+        session=MySQLConnection.get_session()
+        try:
+            customers=session.query(Customer).all()
+            return customers
+        except Exception as e:
+            print(f"Error fetching customers: {e}")
+            return []
+        finally:
+            session.close()
