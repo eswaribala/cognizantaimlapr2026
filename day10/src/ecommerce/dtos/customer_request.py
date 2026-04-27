@@ -8,5 +8,5 @@ class CustomerRequest(BaseModel):
     email: EmailStr
     password: str = Field(..., example="password123", 
                           min_length=5,
-                          max_length=8,
+                          max_length=8,                         
                           description="Password for the customer account")
