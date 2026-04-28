@@ -11,8 +11,8 @@ router=APIRouter(prefix="/catalog/v1.0", tags=["catalog"])
 catalog_service=CatalogServiceImpl()
 
 @router.post("/", status_code=200,response_model=CatalogResponse)
-def create_category(catalog_data:CatalogRequest):
-    return catalog_service.create_category(catalog_data)
+def create_catalog(catalog_data:CatalogRequest):
+    return catalog_service.create_catalog(catalog_data)
 
 @router.get("/", status_code=200,response_model=list[CatalogResponse])
 def get_all_catalogs():

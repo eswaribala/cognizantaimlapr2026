@@ -15,7 +15,7 @@ class CatalogRepository(ABC):
     def get_catalog_by_id(self, catalog_id: int):
         pass
     @abstractmethod
-    def update_catalog(self, catalog: CatalogRequest, catalog_id: int):
+    def update_catalog(self, catalog_id: int, catalog: CatalogRequest):
         pass
     @abstractmethod
     def delete_catalog(self, catalog_id: int):

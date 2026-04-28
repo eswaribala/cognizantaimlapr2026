@@ -45,7 +45,7 @@ class CatalogRepositoryImpl(CatalogRepository):
         finally:
             session.close()
 
-    def update_catalog(self, catalog: CatalogRequest, catalog_id: int):
+    def update_catalog(self, catalog_id: int, catalog: CatalogRequest):
         session = MySQLConnection.get_session()
         try:
             existing_catalog = session.query(Catalog).filter(Catalog.catalog_id == catalog_id).first()
