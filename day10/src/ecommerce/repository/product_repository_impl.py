@@ -70,6 +70,7 @@ class ProductRespositoryImpl(ProductRepository):
             product.catalog_id = updated_product.catalog_id
             
             session.commit()
+            session.refresh(product)  # Refresh to get the updated product details
             return product
         except Exception as e:
             session.rollback()
