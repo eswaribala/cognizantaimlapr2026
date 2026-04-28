@@ -8,15 +8,15 @@ from ecommerce.dtos.product_request import ProductRequest
 
 class ProductService(ABC):
     @abstractmethod
-    def get_product_by_id(self, product_id: int) -> List[ProductResponse]:
+    def get_product_by_id(self, product_id: int) -> ProductResponse:
         pass
 
     @abstractmethod
-    def list_products(self) -> List[ProductResponse]:
+    def get_all_products(self) -> List[ProductResponse]:
         pass
 
     @abstractmethod
-    def create_product(self, product_data: ProductRequest) -> ProductResponse:
+    def add_product(self, product_data: ProductRequest) -> ProductResponse:
         pass
 
     @abstractmethod
