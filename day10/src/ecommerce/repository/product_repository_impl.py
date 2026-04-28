@@ -54,18 +54,6 @@ class ProductRespositoryImpl(ProductRepository):
         finally:
             session.close()
 
-    def get_all_products(self)->list[Product]:
-        # Logic to retrieve all products from the database
-        session = MySQLConnection.get_session()
-        try:
-            products = session.query(Product).all()
-            return products
-        except Exception as e:
-            raise e
-        finally:
-            session.close()    
-
-    
 
     def update_product(self, product_id, updated_product):
         # Logic to update an existing product in the database
