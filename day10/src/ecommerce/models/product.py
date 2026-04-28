@@ -7,7 +7,7 @@ class Product(base):
     product_name = Column(String(255), nullable=False,index=True)
     price = Column(Float, nullable=False, index=True)
     stock_quantity = Column(Integer, nullable=False)
-    catalog_id = Column(ForeignKey('catalog.catalog_id'), Integer,  nullable=False)
-    catalog= relationship('Catalog', back_populates='products')
+    catalog_id = Column(Integer,ForeignKey('catalog.catalog_id'),   nullable=False)
+   #catalog= relationship('Catalog', back_populates='products')
 
    
