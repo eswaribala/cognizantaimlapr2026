@@ -15,8 +15,8 @@ def create_category(catalog_data:CatalogRequest):
     return catalog_service.create_category(catalog_data)
 
 @router.get("/", status_code=200,response_model=list[CatalogResponse])
-def get_all_products():
-    return catalog_service.get_all_products()
+def get_all_catalogs():
+    return catalog_service.get_all_catalogs()
 
 @router.get("/{catalog_id}", status_code=200,response_model=CatalogResponse)
 def get_catalog_by_id(catalog_id: int):
