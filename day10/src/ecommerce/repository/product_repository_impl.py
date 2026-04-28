@@ -36,7 +36,7 @@ class ProductRespositoryImpl(ProductRepository):
         # Logic to retrieve a product by its ID from the database
         session = MySQLConnection.get_session()
         try:
-            product = session.query(Product).filter_by(product_id=product_id).first()
+            product = session.query(Product).filter(Product.product_id==product_id).first()
             return product
         except Exception as e:
             raise e
@@ -71,7 +71,7 @@ class ProductRespositoryImpl(ProductRepository):
         # Logic to update an existing product in the database
         session = MySQLConnection.get_session()
         try:
-            product = session.query(Product).filter_by(product_id=product_id).first()
+            product = session.query(Product).filter(Product.product_id==product_id).first()
             if not product:
                 raise ValueError(f"Product with ID {product_id} does not exist.")
             
@@ -93,7 +93,7 @@ class ProductRespositoryImpl(ProductRepository):
         # Logic to delete a product from the database
         session = MySQLConnection.get_session()
         try:
-            product = session.query(Product).filter_by(product_id=product_id).first()
+            product = session.query(Product).filter(Product.product_id==product_id).first()
             if not product:
                 raise ValueError(f"Product with ID {product_id} does not exist.")
             
