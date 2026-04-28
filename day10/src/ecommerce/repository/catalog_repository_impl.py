@@ -10,7 +10,7 @@ class CatalogRepositoryImpl(CatalogRepository):
         try:
             #dto to model
             new_catalog = Catalog(
-                name=catalog.name,
+                catalog_name=catalog.catalog_name,
                 description=catalog.description
             )
             session.add(new_catalog)
@@ -37,7 +37,7 @@ class CatalogRepositoryImpl(CatalogRepository):
     def get_catalog_by_id(self, catalog_id: int):
         session = MySQLConnection.get_session()
         try:
-            catalog = session.query(Catalog).filter(Catalog.id == catalog_id).first()
+            catalog = session.query(Catalog).filter(Catalog.catalog_id == catalog_id).first()
             return catalog
         except Exception as e:
             session.rollback()
@@ -48,11 +48,11 @@ class CatalogRepositoryImpl(CatalogRepository):
     def update_catalog(self, catalog: CatalogRequest, catalog_id: int):
         session = MySQLConnection.get_session()
         try:
-            existing_catalog = session.query(Catalog).filter(Catalog.id == catalog_id).first()
+            existing_catalog = session.query(Catalog).filter(Catalog.catalog_id == catalog_id).first()
             if not existing_catalog:
                 return None
             
-            existing_catalog.name = catalog.name
+            existing_catalog.catalog_name = catalog.catalog_name
             existing_catalog.description = catalog.description
             session.commit()
             session.refresh(existing_catalog)
@@ -66,7 +66,7 @@ class CatalogRepositoryImpl(CatalogRepository):
     def delete_catalog(self, catalog_id: int):
         session = MySQLConnection.get_session()
         try:
-            catalog = session.query(Catalog).filter(Catalog.id == catalog_id).first()
+            catalog = session.query(Catalog).filter(Catalog.catalog_id == catalog_id).first()
             if not catalog:
                 return None
             session.delete(catalog)
