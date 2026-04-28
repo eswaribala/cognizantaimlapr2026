@@ -8,6 +8,7 @@ class CatalogRepositoryImpl(CatalogRepository):
     def create_catalog(self, catalog: CatalogRequest):
         session = MySQLConnection.get_session()
         try:
+            #dto to model
             new_catalog = Catalog(
                 name=catalog.name,
                 description=catalog.description
