@@ -4,7 +4,6 @@ from turtle import st
 import certifi
 from pymongo import AsyncMongoClient
 
-
 from bankingapp.configurations.conf import Config
 config=Config()
 mongo_client=AsyncMongoClient(config.connection_string,
