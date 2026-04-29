@@ -9,7 +9,8 @@ config=Config()
 mongo_client=AsyncMongoClient(config.connection_string,
                                          tls=True,tlsCAFile=certifi.where())
 db=mongo_client["bankingdb"]
-collection=db["accounts"]
+accounts_collection=db["accounts"]
+transactions_collection=db["transactions"]
 class MongoDBConnection:
    
     @staticmethod 
