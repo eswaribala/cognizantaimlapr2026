@@ -9,3 +9,4 @@ day9env
 day10env
 prodenv
 devenv
+.env

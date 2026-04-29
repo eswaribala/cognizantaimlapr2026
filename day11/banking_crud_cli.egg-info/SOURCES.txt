@@ -1,0 +1,6 @@
+pyproject.toml
+banking_crud_cli.egg-info/PKG-INFO
+banking_crud_cli.egg-info/SOURCES.txt
+banking_crud_cli.egg-info/dependency_links.txt
+banking_crud_cli.egg-info/requires.txt
+banking_crud_cli.egg-info/top_level.txt
