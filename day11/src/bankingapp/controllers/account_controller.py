@@ -30,3 +30,4 @@ async def delete_account(account_id: int):
         return {"message": "Account deleted successfully"}
     else:
         return {"message": "Account not found"}
+    
