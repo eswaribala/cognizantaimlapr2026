@@ -6,17 +6,18 @@ from pymongo import AsyncMongoClient
 
 
 from bankingapp.configurations.conf import Config
-class MongoDBConnection:
-    @staticmethod
-    def create_client(self):
-        self.config=Config()
-        self.mongo_client=AsyncMongoClient(self.config.connection_string,
+config=Config()
+mongo_client=AsyncMongoClient(config.connection_string,
                                          tls=True,tlsCAFile=certifi.where())
-        self.db=self.mongo_client["bankingdb"]
-        self.collection=self.db.create_collection["accounts"]
-
+db=mongo_client["bankingdb"]
+collection=db.create_collection["accounts"]
+class MongoDBConnection:
+   
+    @staticmethod 
+    def get_connection():
+        return mongo_client
     @staticmethod
-    def close_connection(self):
-        self.mongo_client.close()
+    def close_connection():
+        mongo_client.close()
       
 
