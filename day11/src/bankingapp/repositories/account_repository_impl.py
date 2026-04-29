@@ -23,9 +23,16 @@ class AccountRepositoryImpl(AccountRepository):
         return account
 
     async def update_account(self, account_id, balance):
-        await self.accounts_collection.update_one(
+         result = await self.accounts_collection.update_one(
             {"account_no": account_id},
             {"$set": {"balance": balance}}
+            )
+
+         if result.matched_count == 0:
+          return None   # no account found
+
+         return await self.accounts_collection.find_one(
+           {"account_no": account_id}
         )
 
     async def delete_account(self, account_number):
