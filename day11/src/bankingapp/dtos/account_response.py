@@ -6,4 +6,4 @@ class AccountResponse(BaseModel):
     account_no:int 
     account_type:AccountType
     balance:float 
-    opening_date: date 
+    opening_date: str

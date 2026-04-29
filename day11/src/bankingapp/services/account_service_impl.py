@@ -12,21 +12,23 @@ class AccountServiceImpl(AccountService):
 
     async def create_account(self, account_request: AccountRequest):
         result= await self.account_repository.create_account(account_request)
-        account_response=AccountResponse(id=result._id, 
-          account_no=result.account_no,
-          account_type=result.account_type,
-           balance=result.balance,
-           opening_date=result.opening_date)
+        print(result)
+        account_response=AccountResponse(
+          id=result["_id"],  
+          account_no=result["account_no"],
+          account_type=result["account_type"],
+           balance=result["balance"],
+           opening_date=result["opening_date"])
         return account_response
     async def get_account(self, account_id: int):
         result = await self.account_repository.get_account(account_id)
         if result:
             account_response = AccountResponse(
-                id=result._id,
-                account_no=result.account_no,
-                account_type=result.account_type,
-                balance=result.balance,
-                opening_date=result.opening_date
+                id=result["_id"],
+                account_no=result["account_no"],
+                account_type=result["account_type"],
+                balance=result["balance"],
+                opening_date=result["opening_date"]
             )
             return account_response
         return None
@@ -35,11 +37,11 @@ class AccountServiceImpl(AccountService):
         if result:
             updated_account = await self.account_repository.get_account(account_id)
             account_response = AccountResponse(
-                id=updated_account._id,
-                account_no=updated_account.account_no,
-                account_type=updated_account.account_type,
-                balance=updated_account.balance,
-                opening_date=updated_account.opening_date
+                id=updated_account["_id"],
+                account_no=updated_account["account_no"],
+                account_type=updated_account["account_type"],
+                balance=updated_account["balance"],
+                opening_date=updated_account["opening_date"]
             )
             return account_response
         return None
