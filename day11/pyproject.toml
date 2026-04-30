@@ -20,7 +20,8 @@ dependencies = [
     "fastapi>=0.68.0",
     "uvicorn>=0.15.0",
     "certifi>=2021.10.8",
-    "hvac>=0.1.0"
+    "hvac>=0.1.0",
+    "redis>=4.0.0"
 
    
 ]
