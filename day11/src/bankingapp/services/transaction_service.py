@@ -17,7 +17,7 @@ class TransactionService(ABC):
         pass
 
     @abstractmethod
-    async def update_transaction(self, transaction_id:int, transaction:TransactionRequest)->TransactionResponse:
+    async def update_transaction(self, transaction:TransactionRequest)->TransactionResponse:
         pass
 
     @abstractmethod
