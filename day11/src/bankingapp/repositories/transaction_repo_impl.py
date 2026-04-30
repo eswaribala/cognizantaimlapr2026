@@ -3,14 +3,14 @@ from fastapi import HTTPException
 from bankingapp.dtos.transaction_response import TransactionResponse
 from bankingapp.dtos.transaction_request import TransactionRequest
 from bankingapp.repositories.account_repository_impl import AccountRepositoryImpl
-from bankingapp.repositories.transaction_repo import TransactionRepo
-from bankingapp.configurations.mongodb_conn import MongoDBConnection
+from bankingapp.repositories.transaction_repo import TransactionRepository
+from bankingapp.configurations.mongodb_conn import db,transactions_collection,MongoDBConnection
 
-class TransactionRepoImpl(TransactionRepo):
+class TransactionRepoImpl(TransactionRepository):
     def __init__(self):
         self.client = MongoDBConnection.get_connection()
-        self.db = MongoDBConnection.db
-        self.transactions_collection = MongoDBConnection.transactions_collection
+        self.db = db
+        self.transactions_collection = transactions_collection
         self.account_repo = AccountRepositoryImpl()
     
     async def create_transaction(self, transaction:TransactionRequest)->TransactionResponse:

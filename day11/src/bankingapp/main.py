@@ -21,6 +21,8 @@ async def lifespan(app: FastAPI):
 #make api call to the customer controller
 
 from bankingapp.controllers import account_controller
+from bankingapp.controllers import transaction_controller
 
 app.include_router(account_controller.router)
+app.include_router(transaction_controller.router)
 
