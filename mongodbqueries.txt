@@ -1,0 +1,290 @@
+Based on your accounts collection 
+
+{
+  "_id": ObjectId("69f1d9324f99dbee04c22c2e"),
+  "account_no": 1,
+  "account_type": "SAVINGS",
+  "balance": 30000,
+  "opening_date": "2022-01-01"
+}
+QUERIES YOU CAN WRITE 
+1. Get all documents
+{}
+
+2. Find by account number
+{ "account_no": 1 }
+
+3. Find by ObjectId
+{ "_id": { "$oid": "69f1d9324f99dbee04c22c2e" } }
+
+4. Balance greater than
+{ "balance": { "$gt": 10000 } }
+
+5. Balance between
+{ "balance": { "$gte": 10000, "$lte": 40000 } }
+
+6. Account type = SAVINGS
+{ "account_type": "SAVINGS" }
+
+7. Multiple conditions
+{
+  "account_type": "SAVINGS",
+  "balance": { "$gt": 20000 }
+}
+
+8. OR condition
+{
+  "$or": [
+    { "account_type": "SAVINGS" },
+    { "balance": { "$gt": 25000 } }
+  ]
+}
+
+9. NOT equal
+{ "account_type": { "$ne": "SAVINGS" } }
+
+10. IN condition
+{ "account_type": { "$in": ["SAVINGS", "CURRENT"] } }
+
+11. Field exists
+{ "opening_date": { "$exists": true } }
+
+12. Search string (regex)
+{ "account_type": { "$regex": "sav", "$options": "i" } }
+
+13. Date filter (IMPORTANT)
+
+Your date is string → works like this:
+
+{ "opening_date": { "$gt": "2021-12-31" } }
+
+ If stored as ISODate:
+
+{
+  "opening_date": {
+    "$gt": { "$date": "2022-01-01T00:00:00Z" }
+  }
+}
+
+SORT (use right-side "Sort" box)
+{ "balance": -1 }
+
+⚡ PROJECTION (use "Project" box)
+
+{ "account_no": 1, "balance": 1, "_id": 0 }
+
+🚨 VERY IMPORTANT (Common Errors)
+
+❌ Wrong:
+
+{ balance > 10000 }
+
+❌ Wrong:
+
+{ "balance": { "gt": 10000 } }
+
+✅ Correct:
+
+{ "balance": { "$gt": 10000 } }
+🔴 NOTE
+
+
+===================================
+
+INSERT
+
+Click the green + button → Insert Document → paste:
+
+{
+  "account_no": 2,
+  "account_type": "CURRENT",
+  "balance": 50000,
+  "opening_date": "2024-01-10"
+}
+
+For another record:
+
+{
+  "account_no": 3,
+  "account_type": "SAVINGS",
+  "balance": 15000,
+  "opening_date": "2023-05-20"
+}
+
+Then click Insert.
+=====================================
+
+UPDATE
+
+First search the document:
+
+{ "account_no": 1 }
+
+Then click the pencil/edit icon on the document.
+
+Change:
+
+"balance": 30000
+
+to:
+
+"balance": 40000
+
+Then click Update.
+
+To add a new field:
+
+"status": "ACTIVE"
+
+Final document can look like:
+
+{
+  "_id": { "$oid": "69f1d9324f99dbee04c22c2e" },
+  "account_no": 1,
+  "account_type": "SAVINGS",
+  "balance": 40000,
+  "opening_date": "2022-01-01",
+  "status": "ACTIVE"
+}
+==============================
+
+DELETE
+
+First search:
+
+{ "account_no": 2 }
+
+Then click the trash/delete icon on that document.
+
+Confirm delete.
+==================================
+Use the Aggregations tab in Atlas, not the Documents filter box.
+
+1. Show all documents
+[
+  { "$match": {} }
+]
+
+2. Find account by account number
+[
+  { "$match": { "account_no": 1 } }
+]
+
+3. Balance greater than 10000
+[
+  { "$match": { "balance": { "$gt": 10000 } } }
+]
+
+4. Total balance of all accounts
+[
+  {
+    "$group": {
+      "_id": null,
+      "total_balance": { "$sum": "$balance" }
+    }
+  }
+]
+
+5. Average balance by account type
+[
+  {
+    "$group": {
+      "_id": "$account_type",
+      "average_balance": { "$avg": "$balance" }
+    }
+  }
+]
+
+6. Total balance by account type
+[
+  {
+    "$group": {
+      "_id": "$account_type",
+      "total_balance": { "$sum": "$balance" }
+    }
+  }
+]
+7. Count accounts by account type
+[
+  {
+    "$group": {
+      "_id": "$account_type",
+      "total_accounts": { "$sum": 1 }
+    }
+  }
+]
+8. Highest balance account
+[
+  { "$sort": { "balance": -1 } },
+  { "$limit": 1 }
+]
+9. Lowest balance account
+[
+  { "$sort": { "balance": 1 } },
+  { "$limit": 1 }
+]
+10. Show only selected fields
+[
+  {
+    "$project": {
+      "_id": 0,
+      "account_no": 1,
+      "account_type": 1,
+      "balance": 1
+    }
+  }
+]
+11. Add calculated field
+[
+  {
+    "$project": {
+      "_id": 0,
+      "account_no": 1,
+      "balance": 1,
+      "balance_with_bonus": { "$add": ["$balance", 1000] }
+    }
+  }
+]
+12. Filter + sort
+[
+  { "$match": { "account_type": "SAVINGS" } },
+  { "$sort": { "balance": -1 } }
+]
+13. Accounts opened after date string
+[
+  {
+    "$match": {
+      "opening_date": { "$gt": "2022-01-01" }
+    }
+  }
+]
+14. Categorize balance
+[
+  {
+    "$project": {
+      "_id": 0,
+      "account_no": 1,
+      "balance": 1,
+      "category": {
+        "$cond": [
+          { "$gte": ["$balance", 25000] },
+          "HIGH",
+          "NORMAL"
+        ]
+      }
+    }
+  }
+]
+15. Group with min, max, avg
+[
+  {
+    "$group": {
+      "_id": "$account_type",
+      "min_balance": { "$min": "$balance" },
+      "max_balance": { "$max": "$balance" },
+      "avg_balance": { "$avg": "$balance" },
+      "total_balance": { "$sum": "$balance" }
+    }
+  }
+]
+
