@@ -1,0 +1,349 @@
+Lab 1: Customer Registration System
+
+Business Scenario:
+An e-commerce company wants to register customers and store structured customer details.
+
+Database: MySQL
+
+Tasks:
+
+Create customers table.
+Build FastAPI POST API to register customer.
+Validate email and password using Pydantic.
+Create GET API to fetch customer by ID.
+Create GET API to list all customers.
+
+Tables:
+
+customers(
+  customer_id,
+  first_name,
+  last_name,
+  email,
+  password,
+  created_at
+)
+
+APIs:
+
+POST /customers
+GET /customers
+GET /customers/{customer_id}
+==============================================
+Lab 2: Product Catalog Management
+
+Business Scenario:
+An online store wants to manage product categories and products.
+
+Database: MySQL
+
+Tasks:
+
+Create categories table.
+Create products table.
+Implement one-to-many relationship: one category has many products.
+Add APIs for product CRUD.
+Fetch all products under a category.
+
+Tables:
+
+categories(
+  category_id,
+  category_name
+)
+
+products(
+  product_id,
+  product_name,
+  price,
+  stock,
+  category_id
+)
+
+APIs:
+
+POST /categories
+POST /products
+GET /products
+GET /categories/{category_id}/products
+PUT /products/{product_id}
+DELETE /products/{product_id}
+=================================================
+Lab 3: Banking Account Management
+
+Business Scenario:
+A bank wants to manage customer accounts.
+
+Database: MongoDB
+
+Tasks:
+
+Create accounts collection.
+Insert account documents.
+Search account by account_no.
+Update account balance.
+Delete closed accounts.
+
+Collection:
+
+{
+  "account_no": 1001,
+  "account_type": "SAVINGS",
+  "balance": 25000,
+  "opening_date": "2026-01-01"
+}
+
+APIs:
+
+POST /accounts
+GET /accounts/{account_no}
+PUT /accounts/{account_no}/balance
+DELETE /accounts/{account_no}
+====================================================
+Lab 4: Banking Transactions
+
+Business Scenario:
+A bank wants to record deposits, withdrawals, and transfers.
+
+Database: MongoDB
+
+Tasks:
+
+Create transactions collection.
+Store account reference using account_no.
+Add deposit API.
+Add withdrawal API.
+Check insufficient balance before withdrawal.
+Fetch transaction history by account number.
+
+Collection:
+
+{
+  "transaction_id": "TXN1001",
+  "account_no": 1001,
+  "transaction_type": "DEPOSIT",
+  "amount": 5000,
+  "transaction_date": "2026-04-30"
+}
+
+APIs:
+
+POST /transactions/deposit
+POST /transactions/withdraw
+GET /accounts/{account_no}/transactions
+===========================================================
+Lab 5: Order Management System
+
+Business Scenario:
+An e-commerce company wants to allow customers to place orders.
+
+Database: MySQL + MongoDB
+
+Usage:
+
+MySQL: customers, products
+MongoDB: orders
+
+Tasks:
+
+Store customer and product master data in MySQL.
+Store order document in MongoDB.
+Validate customer exists before placing order.
+Validate product stock before order.
+Reduce product stock after order.
+Fetch order history by customer ID.
+
+MongoDB Order Document:
+
+{
+  "order_id": "ORD1001",
+  "customer_id": 1,
+  "items": [
+    {
+      "product_id": 101,
+      "quantity": 2,
+      "price": 500
+    }
+  ],
+  "total_amount": 1000,
+  "status": "PLACED"
+}
+
+APIs:
+
+POST /orders
+GET /orders/{order_id}
+GET /customers/{customer_id}/orders
+PUT /orders/{order_id}/status
+=============================================================
+Lab 6: Inventory Tracking System
+
+Business Scenario:
+A retail company wants to track product stock movements.
+
+Database: MySQL + MongoDB
+
+Usage:
+
+MySQL: product master
+MongoDB: stock movement logs
+
+Tasks:
+
+Store product details in MySQL.
+Store stock movement logs in MongoDB.
+Add stock-in API.
+Add stock-out API.
+Update product stock in MySQL.
+Fetch stock history from MongoDB.
+
+MongoDB Document:
+
+{
+  "product_id": 101,
+  "movement_type": "STOCK_IN",
+  "quantity": 50,
+  "remarks": "Supplier delivery",
+  "created_at": "2026-04-30"
+}
+=================================================
+Lab 7: Hospital Patient Management
+
+Business Scenario:
+A hospital wants to manage patients and medical visit history.
+
+Database: MySQL + MongoDB
+
+Usage:
+
+MySQL: patient master
+MongoDB: visit records
+
+Tasks:
+
+Store patient basic details in MySQL.
+Store diagnosis and prescription in MongoDB.
+Create patient registration API.
+Create visit record API.
+Fetch full patient medical history.
+
+MySQL Table:
+
+patients(
+  patient_id,
+  name,
+  age,
+  phone,
+  email
+)
+
+MongoDB Document:
+
+{
+  "patient_id": 1,
+  "doctor_name": "Dr. Kumar",
+  "diagnosis": "Fever",
+  "prescription": ["Paracetamol", "Rest"],
+  "visit_date": "2026-04-30"
+}
+=========================================================
+Lab 8: Course Enrollment System
+
+Business Scenario:
+A training company wants to manage learners and course enrollments.
+
+Database: MySQL
+
+Tasks:
+
+Create learners table.
+Create courses table.
+Create enrollments table.
+Implement many-to-many relationship.
+Fetch all courses for a learner.
+Fetch all learners for a course.
+
+Tables:
+
+learners(
+  learner_id,
+  name,
+  email
+)
+
+courses(
+  course_id,
+  course_name,
+  duration
+)
+
+enrollments(
+  enrollment_id,
+  learner_id,
+  course_id,
+  enrollment_date
+)
+================================================================
+Lab 9: Customer Support Ticket System
+
+Business Scenario:
+A company wants to track support tickets and ticket conversations.
+
+Database: MySQL + MongoDB
+
+Usage:
+
+MySQL: ticket summary
+MongoDB: ticket messages
+
+Tasks:
+
+Store ticket summary in MySQL.
+Store chat conversation in MongoDB.
+Create ticket API.
+Add message to ticket.
+Change ticket status.
+Fetch full ticket conversation.
+
+MongoDB Document:
+
+{
+  "ticket_id": 101,
+  "messages": [
+    {
+      "sender": "customer",
+      "message": "I cannot login",
+      "created_at": "2026-04-30"
+    }
+  ]
+}
+==================================================================
+Lab 10: Food Delivery Application
+
+Business Scenario:
+A food delivery platform wants to manage restaurants, menus, and orders.
+
+Database: MySQL + MongoDB
+
+Usage:
+
+MySQL: restaurants, menu items
+MongoDB: order details and delivery tracking
+
+Tasks:
+
+Create restaurant table.
+Create menu table.
+Place food order.
+Store order in MongoDB.
+Track delivery status.
+Fetch orders by customer.
+
+APIs:
+
+POST /restaurants
+POST /menus
+POST /food-orders
+PUT /food-orders/{order_id}/status
+GET /customers/{customer_id}/food-orders
+=======================================================
