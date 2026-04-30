@@ -1,4 +1,5 @@
 #create transaction repository implementation
+from fastapi import HTTPException
 from bankingapp.dtos.transaction_response import TransactionResponse
 from bankingapp.dtos.transaction_request import TransactionRequest
 from bankingapp.repositories.account_repository_impl import AccountRepositoryImpl
@@ -15,7 +16,7 @@ class TransactionRepoImpl(TransactionRepo):
     async def create_transaction(self, transaction:TransactionRequest)->TransactionResponse:
         account = await self.account_repo.get_account(transaction.account_no)
         if not account:
-            raise ValueError("Account not found")
+            raise HTTPException(status_code=500, detail="Account not found")
            
         
         transaction_doc = {
@@ -39,7 +40,7 @@ class TransactionRepoImpl(TransactionRepo):
     async def get_transaction_by_id(self, transaction_id:int)->TransactionResponse:
         transaction = await self.transactions_collection.find_one({"transaction_id": transaction_id})
         if not transaction:
-            raise ValueError("Transaction not found")
+            raise HTTPException(status_code=500, detail="Transaction not found")
         transaction_response = TransactionResponse(
             transaction_id=transaction["transaction_id"],
             account_no=transaction["account_no"],
@@ -72,7 +73,7 @@ class TransactionRepoImpl(TransactionRepo):
             }}
         )
         if result.matched_count == 0:
-            raise ValueError("Transaction not found")
+            raise HTTPException(status_code=500, detail="Transaction not found")
         updated_transaction = await self.transactions_collection.find_one({"transaction_id": transaction.transaction_id})
         transaction_response = TransactionResponse(
             transaction_id=updated_transaction["transaction_id"],
