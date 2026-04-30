@@ -15,7 +15,7 @@ QUERIES YOU CAN WRITE
 { "account_no": 1 }
 
 3. Find by ObjectId
-{ "_id": { "$oid": "69f1d9324f99dbee04c22c2e" } }
+{ "_id": ObjectId("69f1d9324f99dbee04c22c2e" )}
 
 4. Balance greater than
 { "balance": { "$gt": 10000 } }
