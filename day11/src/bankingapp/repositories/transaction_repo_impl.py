@@ -35,6 +35,57 @@ class TransactionRepoImpl(TransactionRepo):
             transaction_date=created_transaction["transaction_date"]
         )
         return transaction_response
+    
+    async def get_transaction_by_id(self, transaction_id:int)->TransactionResponse:
+        transaction = await self.transactions_collection.find_one({"transaction_id": transaction_id})
+        if not transaction:
+            raise ValueError("Transaction not found")
+        transaction_response = TransactionResponse(
+            transaction_id=transaction["transaction_id"],
+            account_no=transaction["account_no"],
+            amount=transaction["amount"],
+            transaction_type=transaction["transaction_type"],
+            transaction_date=transaction["transaction_date"]
+        )
+        return transaction_response
+    async def get_all_transactions(self)->list[TransactionResponse]:
+        transactions_cursor = self.transactions_collection.find()
+        transactions = []
+        async for transaction in transactions_cursor:
+            transaction_response = TransactionResponse(
+                transaction_id=transaction["transaction_id"],
+                account_no=transaction["account_no"],
+                amount=transaction["amount"],
+                transaction_type=transaction["transaction_type"],
+                transaction_date=transaction["transaction_date"]
+            )
+            transactions.append(transaction_response)
+        return transactions
+    async def update_transaction(self, transaction:TransactionRequest)->TransactionResponse:
+        result = await self.transactions_collection.update_one(
+            {"transaction_id": transaction.transaction_id},
+            {"$set": {
+                "account_no": transaction.account_no,
+                "amount": transaction.amount,
+                "transaction_type": transaction.transaction_type,
+                "transaction_date": transaction.transaction_date
+            }}
+        )
+        if result.matched_count == 0:
+            raise ValueError("Transaction not found")
+        updated_transaction = await self.transactions_collection.find_one({"transaction_id": transaction.transaction_id})
+        transaction_response = TransactionResponse(
+            transaction_id=updated_transaction["transaction_id"],
+            account_no=updated_transaction["account_no"],
+            amount=updated_transaction["amount"],
+            transaction_type=updated_transaction["transaction_type"],
+            transaction_date=updated_transaction["transaction_date"]
+        )
+        return transaction_response
+    
+    async def delete_transaction(self, transaction_id:int)->bool:
+        result = await self.transactions_collection.delete_one({"transaction_id": transaction_id})
+        return result.deleted_count > 0
 
  
     
