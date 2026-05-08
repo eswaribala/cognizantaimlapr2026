@@ -27,6 +27,7 @@ Identify:
 
 abnormal transaction behavior
 dominant fraud patterns
+=======================================================================
 2. A/B Testing for E-Commerce Checkout
 Scenario
 
@@ -51,7 +52,7 @@ Power analysis
 Expected Outcome
 
 Determine whether new design improves conversions.
-
+=====================================================================================
 3. Hospital Recovery Time Analysis
 Scenario
 
@@ -75,7 +76,7 @@ Regression modeling
 Expected Outcome
 
 Find which medicine improves recovery speed.
-
+============================================================================================
 4. Website Traffic Poisson Modeling
 Scenario
 
@@ -97,7 +98,7 @@ Calculate anomaly probability
 Expected Outcome
 
 Detect abnormal traffic bursts or DDoS-like patterns.
-
+==============================================================================
 5. Delivery Time Optimization
 Scenario
 
@@ -118,7 +119,7 @@ Regression analysis
 Expected Outcome
 
 Estimate delivery delay probability.
-
+=============================================================================
 6. Manufacturing Quality Control
 Scenario
 
@@ -140,7 +141,7 @@ Six Sigma defect analysis
 Expected Outcome
 
 Identify defective production patterns.
-
+==============================================================================
 7. Employee Productivity Analytics
 Scenario
 
@@ -162,7 +163,7 @@ Feature importance analysis
 Expected Outcome
 
 Identify factors impacting productivity.
-
+======================================================================================
 8. Cybersecurity Intrusion Detection
 Scenario
 
@@ -184,7 +185,7 @@ Mahalanobis distance
 Expected Outcome
 
 Detect suspicious login behavior.
-
+====================================================================================
 9. Retail Demand Forecasting
 Scenario
 
@@ -206,7 +207,7 @@ Forecasting
 Expected Outcome
 
 Predict future inventory requirements.
-
+=============================================================================
 10. AI Model Drift Detection
 Scenario
 
