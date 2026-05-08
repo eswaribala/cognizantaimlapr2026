@@ -1,0 +1,230 @@
+1. Fraud Detection Using Transaction Data
+Scenario
+
+A bank wants to detect suspicious credit card transactions using statistical analysis.
+
+Dataset
+
+Fields:
+
+transaction_amount
+transaction_time
+location_risk_score
+fraud_flag
+Tasks
+Compute:
+mean
+median
+variance
+skewness
+Detect outliers using Z-score
+Apply covariance matrix
+Compute eigenvalues/eigenvectors
+Perform Principal Component Analysis
+Expected Outcome
+
+Identify:
+
+abnormal transaction behavior
+dominant fraud patterns
+2. A/B Testing for E-Commerce Checkout
+Scenario
+
+An e-commerce company tests two checkout page designs.
+
+Dataset
+
+Fields:
+
+user_id
+version_A_or_B
+purchase_made
+cart_value
+Tasks
+Compute conversion rate
+Confidence interval
+Hypothesis testing
+Perform:
+z-test
+t-test
+Power analysis
+Expected Outcome
+
+Determine whether new design improves conversions.
+
+3. Hospital Recovery Time Analysis
+Scenario
+
+A hospital compares recovery time for two diabetes medicines.
+
+Dataset
+
+Fields:
+
+patient_id
+medicine_type
+age
+sugar_level
+recovery_days
+Tasks
+Distribution analysis
+Normality testing
+Correlation analysis
+ANOVA test
+Regression modeling
+Expected Outcome
+
+Find which medicine improves recovery speed.
+
+4. Website Traffic Poisson Modeling
+Scenario
+
+A streaming platform monitors incoming requests per second.
+
+Dataset
+
+Fields:
+
+timestamp
+requests_per_second
+Tasks
+Model using Poisson Distribution
+Compute:
+λ (lambda)
+PMF
+Identify traffic spikes
+Calculate anomaly probability
+Expected Outcome
+
+Detect abnormal traffic bursts or DDoS-like patterns.
+
+5. Delivery Time Optimization
+Scenario
+
+A logistics company analyzes package delivery times.
+
+Dataset
+
+Fields:
+
+distance_km
+traffic_level
+delivery_time_minutes
+Tasks
+Probability Density Function
+Exponential distribution fitting
+Confidence interval estimation
+Regression analysis
+Expected Outcome
+
+Estimate delivery delay probability.
+
+6. Manufacturing Quality Control
+Scenario
+
+A factory monitors defects in semiconductor chips.
+
+Dataset
+
+Fields:
+
+machine_id
+temperature
+pressure
+defect_count
+Tasks
+Binomial distribution
+Control charts
+Mean and variance analysis
+Six Sigma defect analysis
+Expected Outcome
+
+Identify defective production patterns.
+
+7. Employee Productivity Analytics
+Scenario
+
+An IT company analyzes employee productivity.
+
+Dataset
+
+Fields:
+
+coding_hours
+bugs_fixed
+meetings_attended
+productivity_score
+Tasks
+Correlation matrix
+Multiple regression
+PCA dimensionality reduction
+Feature importance analysis
+Expected Outcome
+
+Identify factors impacting productivity.
+
+8. Cybersecurity Intrusion Detection
+Scenario
+
+A SOC team analyzes login attempts.
+
+Dataset
+
+Fields:
+
+login_time
+failed_attempts
+IP_risk_score
+device_changes
+Tasks
+Gaussian anomaly detection
+Z-score analysis
+Covariance matrix
+Mahalanobis distance
+Expected Outcome
+
+Detect suspicious login behavior.
+
+9. Retail Demand Forecasting
+Scenario
+
+A supermarket predicts product demand.
+
+Dataset
+
+Fields:
+
+product_id
+day
+sales_count
+promotion_flag
+Tasks
+Time-series decomposition
+Moving averages
+Seasonal trend analysis
+Forecasting
+Expected Outcome
+
+Predict future inventory requirements.
+
+10. AI Model Drift Detection
+Scenario
+
+An AI recommendation system experiences prediction degradation.
+
+Dataset
+
+Fields:
+
+prediction_score
+actual_click
+timestamp
+user_region
+Tasks
+Distribution comparison
+KL divergence
+Population Stability Index (PSI)
+Drift visualization
+Expected Outcome
+
+Detect model drift and retraining need.
