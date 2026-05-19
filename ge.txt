@@ -1,0 +1,52 @@
+import great_expectations as gx
+from great_expectations.core.batch import RuntimeBatchRequest
+
+
+def ge_suite(self):
+
+    # Create datasource
+    self.context.add_datasource(
+        name="customer_source",
+        class_name="Datasource",
+        execution_engine={
+            "class_name": "PandasExecutionEngine"
+        },
+        data_connectors={
+            "runtime_connector": {
+                "class_name": "RuntimeDataConnector",
+                "batch_identifiers": ["default_identifier_name"]
+            }
+        }
+    )
+
+    # Create expectation suite
+    suite_name = "customers_suite"
+
+    try:
+        self.context.get_expectation_suite(suite_name)
+    except Exception:
+        self.context.add_expectation_suite(
+            expectation_suite_name=suite_name
+        )
+
+    # Runtime batch request (for pandas dataframe)
+    self.batch_request = RuntimeBatchRequest(
+        datasource_name="customer_source",
+        data_connector_name="runtime_connector",
+        data_asset_name="customers",
+        runtime_parameters={
+            "batch_data": None   # later pass dataframe here
+        },
+        batch_identifiers={
+            "default_identifier_name": "default_id"
+        }
+    )
+
+    self.suite = self.context.get_expectation_suite(suite_name)
+
+    return (
+        self.suite,
+        self.batch_request,
+        "customers",
+        "customer_source"
+    )
