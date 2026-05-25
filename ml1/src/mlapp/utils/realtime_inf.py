@@ -13,5 +13,8 @@ class Request(BaseModel):
 def analyse_text(request:Request):
     sentiment_pipeline=pipeline("sentiment-analysis")
     result=sentiment_pipeline(request.review_text) [0]
-    return {"sentiment":result[0]['label'],
-            "confidence_score":round(result[0]['score'],4)}
+    return {
+        "review": request.review_text,
+        "sentiment": result["label"],
+        "confidence_score": round(result["score"], 4)
+    }
