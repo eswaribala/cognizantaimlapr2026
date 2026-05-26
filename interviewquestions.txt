@@ -1,0 +1,1222 @@
+1. Set and Frozen Set
+A frozenset in Python is an immutable version of a set.
+
+Normal set → can add/remove elements
+frozenset → cannot be modified after creation
+
+Syntax
+fs = frozenset(iterable)
+
+Example:
+
+numbers = frozenset([1, 2, 3, 4])
+
+print(numbers)
+
+Output:
+
+frozenset({1, 2, 3, 4})
+Why use frozenset?
+Immutable (read-only)
+Can be used as a dictionary key
+===========================================
+2. Convert rows to column for distict city in row becomes column in my sql
+Use conditional aggregation to convert distinct city rows into columns in MySQL.
+
+Example table:
+
+customers
+---------
+id | city
+1  | Chennai
+2  | Mumbai
+3  | Chennai
+4  | Delhi
+Cities as columns with counts
+SELECT
+    SUM(CASE WHEN city = 'Chennai' THEN 1 ELSE 0 END) AS Chennai,
+    SUM(CASE WHEN city = 'Mumbai' THEN 1 ELSE 0 END) AS Mumbai,
+    SUM(CASE WHEN city = 'Delhi' THEN 1 ELSE 0 END) AS Delhi
+FROM customers;
+
+Output:
+
+Chennai | Mumbai | Delhi
+2       | 1      | 1
+If you want one row per city converted to column names
+SELECT
+    MAX(CASE WHEN city = 'Chennai' THEN city END) AS Chennai,
+    MAX(CASE WHEN city = 'Mumbai' THEN city END) AS Mumbai,
+    MAX(CASE WHEN city = 'Delhi' THEN city END) AS Delhi
+FROM customers;
+Dynamic pivot for unknown cities
+SET @sql = NULL;
+
+SELECT GROUP_CONCAT(
+    DISTINCT CONCAT(
+        'SUM(CASE WHEN city = ''',
+        city,
+        ''' THEN 1 ELSE 0 END) AS `',
+        city,
+        '`'
+    )
+) INTO @sql
+FROM customers;
+
+SET @sql = CONCAT('SELECT ', @sql, ' FROM customers');
+
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+Use this when city names are not fixed.
+Can be stored inside another set
+
+Normal set cannot do this because it is mutable.
+===================================================
+3. Moving Average
+A moving average is a technique used to smooth data by taking the average of a fixed number of recent values.
+
+It is commonly used in:
+
+Finance (stock prices)
+Time series analysis
+Sales trends
+Sensor/IoT data
+Machine learning preprocessing
+Formula
+
+For a 3-period moving average:
+
+
+MA=x1​+x2​+x3​/3
+	​
+
+
+It means: take the last 3 values, add them, divide by 3.
+
+Example
+
+Suppose sales data:
+
+Day	Sales
+1	10
+2	20
+3	30
+4	40
+5	50
+
+For 3-day moving average:
+
+Day 3:
+
+(10 + 20 + 30) / 3 = 20
+
+Day 4:
+
+(20 + 30 + 40) / 3 = 30
+
+Day 5:
+
+(30 + 40 + 50) / 3 = 40
+
+Result:
+
+Day	Sales	Moving Avg (3)
+1	10	NULL
+2	20	NULL
+3	30	20
+4	40	30
+5	50	40
+Python Example
+sales = [10, 20, 30, 40, 50]
+
+window = 3
+
+moving_avg = []
+
+for i in range(len(sales)):
+    if i < window - 1:
+        moving_avg.append(None)
+    else:
+        avg = sum(sales[i-window+1:i+1]) / window
+        moving_avg.append(avg)
+
+print(moving_avg)
+
+Output:
+
+[None, None, 20.0, 30.0, 40.0]
+Using Pandas
+
+pandas
+
+import pandas as pd
+
+df = pd.DataFrame({
+    "sales": [10, 20, 30, 40, 50]
+})
+
+df["moving_avg"] = df["sales"].rolling(window=3).mean()
+
+print(df)
+
+Output:
+
+   sales  moving_avg
+0     10         NaN
+1     20         NaN
+2     30        20.0
+3     40        30.0
+4     50        40.0
+Moving Average in SQL (MySQL)
+
+Using window functions:
+
+SELECT
+    day,
+    sales,
+    AVG(sales) OVER (
+        ORDER BY day
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) AS moving_average
+FROM sales_table;
+
+This calculates a 3-row moving average.
+
+Example:
+
+Day | Sales | Moving Avg
+1   | 10    | 10
+2   | 20    | 15
+3   | 30    | 20
+4   | 40    | 30
+5   | 50    | 40
+
+Difference:
+
+Simple Average → average of all values
+Moving Average → average of recent values only (rolling window)
+==========================================
+4. Window functions in SQL perform calculations across a set of rows related to the current row without grouping rows into one result.
+
+Unlike GROUP BY, window functions keep individual rows and add calculated values.
+
+Syntax
+FUNCTION() OVER (
+    PARTITION BY column
+    ORDER BY column
+)
+OVER() → makes it a window function
+PARTITION BY → divides rows into groups (optional)
+ORDER BY → defines order inside group
+ROWS/RANGE → defines window frame
+Why use window functions?
+
+Instead of:
+
+SELECT department, AVG(salary)
+FROM employee
+GROUP BY department;
+
+which gives one row per department,
+
+window function gives:
+
+SELECT
+    name,
+    department,
+    salary,
+    AVG(salary) OVER(PARTITION BY department) AS dept_avg
+FROM employee;
+
+Output:
+
+name	department	salary	dept_avg
+Ravi	IT	50000	60000
+Priya	IT	70000	60000
+Arun	HR	40000	45000
+Meena	HR	50000	45000
+
+Each row remains.
+
+Example Table
+employee
+--------------------------------
+id | name  | dept | salary
+1  | Ravi  | IT   | 50000
+2  | Priya | IT   | 70000
+3  | Arun  | HR   | 40000
+4  | Meena | HR   | 50000
+5  | Kiran | IT   | 80000
+1. ROW_NUMBER()
+
+Assign unique row numbers.
+
+SELECT
+    name,
+    dept,
+    salary,
+    ROW_NUMBER() OVER(
+        PARTITION BY dept
+        ORDER BY salary DESC
+    ) AS row_num
+FROM employee;
+
+Output:
+
+name	dept	salary	row_num
+Kiran	IT	80000	1
+Priya	IT	70000	2
+Ravi	IT	50000	3
+Meena	HR	50000	1
+Arun	HR	40000	2
+
+Use case: Top N employees per department.
+
+2. RANK()
+
+Same rank for ties, gaps appear.
+
+SELECT
+    name,
+    salary,
+    RANK() OVER(ORDER BY salary DESC) AS rank_num
+FROM employee;
+
+Example:
+
+80000 → Rank 1
+70000 → Rank 2
+70000 → Rank 2
+50000 → Rank 4
+3. DENSE_RANK()
+
+No gaps in ranking.
+
+SELECT
+    name,
+    salary,
+    DENSE_RANK() OVER(
+        ORDER BY salary DESC
+    ) AS dense_rank_num
+FROM employee;
+
+Example:
+
+80000 → 1
+70000 → 2
+70000 → 2
+50000 → 3
+4. LAG()
+
+Previous row value.
+
+SELECT
+    name,
+    salary,
+    LAG(salary) OVER(
+        ORDER BY salary
+    ) AS prev_salary
+FROM employee;
+
+Output:
+
+salary	prev_salary
+40000	NULL
+50000	40000
+70000	50000
+
+Used for comparison.
+
+5. LEAD()
+
+Next row value.
+
+SELECT
+    name,
+    salary,
+    LEAD(salary) OVER(
+        ORDER BY salary
+    ) AS next_salary
+FROM employee;
+6. Running Total (Cumulative Sum)
+SELECT
+    name,
+    salary,
+    SUM(salary) OVER(
+        ORDER BY id
+    ) AS running_total
+FROM employee;
+
+Output:
+
+50000
+120000
+160000
+210000
+290000
+7. Moving Average
+SELECT
+    id,
+    salary,
+    AVG(salary) OVER(
+        ORDER BY id
+        ROWS BETWEEN 2 PRECEDING
+        AND CURRENT ROW
+    ) AS moving_avg
+FROM employee;
+
+3-row moving average.
+
+8. FIRST_VALUE()
+
+Gets first value in partition.
+
+SELECT
+    name,
+    dept,
+    salary,
+    FIRST_VALUE(salary) OVER(
+        PARTITION BY dept
+        ORDER BY salary DESC
+    ) AS highest_salary
+FROM employee;
+9. LAST_VALUE()
+
+Gets last value.
+
+SELECT
+    name,
+    salary,
+    LAST_VALUE(salary) OVER(
+        ORDER BY salary
+        ROWS BETWEEN UNBOUNDED PRECEDING
+        AND UNBOUNDED FOLLOWING
+    ) AS max_salary
+FROM employee;
+Common Interview Difference
+GROUP BY
+SELECT dept, AVG(salary)
+FROM employee
+GROUP BY dept;
+
+Returns:
+
+IT → 66666
+HR → 45000
+Window Function
+SELECT
+ name,
+ dept,
+ AVG(salary) OVER(
+   PARTITION BY dept
+ )
+FROM employee;
+
+Keeps all rows + extra calculation.
+
+Key idea:
+GROUP BY → collapses rows
+Window function → keeps rows and computes analytics on related rows
+==============================================
+5. 1. Find Memory Leak in Large Processing
+
+Scenario:
+A CSV processing job crashes after running for 2 hours due to memory increase.
+
+What would you do?
+
+Example problematic code:
+
+data = []
+
+for line in open("largefile.txt"):
+    data.append(line.upper())
+
+Problem:
+
+Entire file loaded into memory.
+
+Better approach:
+
+def process_file(file_name):
+    with open(file_name) as f:
+        for line in f:
+            yield line.upper()
+
+for item in process_file("largefile.txt"):
+    print(item)
+
+Concepts:
+
+Generators
+Lazy loading
+Memory optimization
+yield
+2. Implement LRU Cache
+
+Scenario:
+API responses are expensive. Cache only recent items.
+
+from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.cache = OrderedDict()
+
+    def get(self, key):
+        if key not in self.cache:
+            return -1
+
+        self.cache.move_to_end(key)
+        return self.cache[key]
+
+    def put(self, key, value):
+        if key in self.cache:
+            self.cache.move_to_end(key)
+
+        self.cache[key] = value
+
+        if len(self.cache) > self.capacity:
+            self.cache.popitem(last=False)
+
+
+cache = LRUCache(3)
+
+cache.put(1, "A")
+cache.put(2, "B")
+cache.put(3, "C")
+cache.put(4, "D")
+
+print(cache.cache)
+
+Concepts:
+
+OOP
+OrderedDict
+Design
+3. Thread-safe Singleton
+
+Scenario:
+Multiple threads create DB connection manager.
+
+import threading
+
+class Singleton:
+    _instance = None
+    _lock = threading.Lock()
+
+    def __new__(cls):
+        with cls._lock:
+            if cls._instance is None:
+                cls._instance = super().__new__(cls)
+
+        return cls._instance
+
+Concepts:
+
+Thread safety
+Locking
+Singleton
+4. Async API Calls
+
+Scenario:
+Call 100 APIs concurrently.
+
+import asyncio
+import aiohttp
+
+async def fetch(session, url):
+    async with session.get(url) as response:
+        return await response.text()
+
+async def main():
+    urls = [
+        "https://jsonplaceholder.typicode.com/posts/1"
+    ] * 100
+
+    async with aiohttp.ClientSession() as session:
+        tasks = [
+            fetch(session, url)
+            for url in urls
+        ]
+
+        results = await asyncio.gather(*tasks)
+
+        print(len(results))
+
+asyncio.run(main())
+
+Concepts:
+
+async
+await
+concurrency
+gather
+5. Custom Context Manager
+
+Scenario:
+Auto-close DB/file connection.
+
+class Database:
+
+    def __enter__(self):
+        print("Connected")
+        return self
+
+    def __exit__(self, exc_type,
+                 exc_val, exc_tb):
+        print("Closed")
+
+
+with Database():
+    print("Running query")
+
+Concepts:
+
+with
+context manager
+cleanup
+6. Retry Decorator
+
+Scenario:
+Retry flaky API.
+
+import time
+
+def retry(times):
+
+    def decorator(func):
+
+        def wrapper(*args, **kwargs):
+
+            for i in range(times):
+                try:
+                    return func(*args, **kwargs)
+                except Exception:
+                    time.sleep(1)
+
+            raise Exception("Failed")
+
+        return wrapper
+
+    return decorator
+
+
+@retry(3)
+def api():
+    print("Calling API")
+    raise Exception("Network error")
+
+
+api()
+
+Concepts:
+
+Decorator
+Retry logic
+7. Rate Limiter
+
+Scenario:
+Only 5 API calls/sec.
+
+import time
+
+class RateLimiter:
+
+    def __init__(self, limit):
+        self.limit = limit
+        self.calls = []
+
+    def allow(self):
+        now = time.time()
+
+        self.calls = [
+            x for x in self.calls
+            if now - x < 1
+        ]
+
+        if len(self.calls) < self.limit:
+            self.calls.append(now)
+            return True
+
+        return False
+8. Top K Frequent Words
+
+Scenario:
+Process logs.
+
+from collections import Counter
+
+words = [
+    "error",
+    "warning",
+    "error",
+    "debug"
+]
+
+k = 2
+
+result = Counter(words).most_common(k)
+
+print(result)
+9. Detect Circular Dependency
+
+Scenario: Graph problem
+
+graph = {
+    "A": ["B"],
+    "B": ["C"],
+    "C": ["A"]
+}
+
+visited = set()
+
+def dfs(node, stack):
+    if node in stack:
+        return True
+
+    if node in visited:
+        return False
+
+    visited.add(node)
+    stack.add(node)
+
+    for neighbor in graph[node]:
+        if dfs(neighbor, stack):
+            return True
+
+    stack.remove(node)
+
+    return False
+
+
+print(dfs("A", set()))
+10. Producer Consumer
+
+Scenario: Queue processing.
+
+import threading
+import queue
+
+q = queue.Queue()
+
+def producer():
+    for i in range(5):
+        q.put(i)
+
+def consumer():
+    while True:
+        item = q.get()
+        print(item)
+        q.task_done()
+
+threading.Thread(target=consumer,
+                 daemon=True).start()
+
+producer()
+q.join()
+=============================
+6.1. Reverse a String
+
+Scenario:
+User enters a word. Reverse it.
+
+text = "python"
+
+print(text[::-1])
+
+Output:
+
+nohtyp
+
+Without slicing:
+
+text = "python"
+
+result = ""
+
+for ch in text:
+    result = ch + result
+
+print(result)
+2. Palindrome Check
+
+Scenario:
+Check if a word reads same forward/backward.
+
+text = "madam"
+
+if text == text[::-1]:
+    print("Palindrome")
+else:
+    print("Not palindrome")
+3. Count Vowels
+
+Scenario:
+Count vowels in input.
+
+text = "education"
+
+count = 0
+
+for ch in text.lower():
+    if ch in "aeiou":
+        count += 1
+
+print(count)
+4. Find Largest Number
+
+Scenario:
+Find maximum salary/marks.
+
+numbers = [10, 25, 7, 99, 40]
+
+largest = numbers[0]
+
+for n in numbers:
+    if n > largest:
+        largest = n
+
+print(largest)
+5. Remove Duplicates
+
+Scenario:
+Remove duplicate customer IDs.
+
+nums = [1, 2, 2, 3, 4, 4, 5]
+
+unique = list(set(nums))
+
+print(unique)
+
+Preserve order:
+
+nums = [1, 2, 2, 3, 4, 4]
+
+result = []
+
+for n in nums:
+    if n not in result:
+        result.append(n)
+
+print(result)
+6. Count Word Frequency
+
+Scenario:
+Log/message analysis.
+
+text = "python java python sql"
+
+words = text.split()
+
+freq = {}
+
+for word in words:
+    freq[word] = freq.get(word, 0) + 1
+
+print(freq)
+
+Output:
+
+{'python': 2, 'java': 1, 'sql': 1}
+7. Even or Odd
+
+Scenario:
+Check ticket/customer ID parity.
+
+num = 15
+
+if num % 2 == 0:
+    print("Even")
+else:
+    print("Odd")
+8. Factorial
+
+Scenario:
+Mathematical computation.
+
+num = 5
+fact = 1
+
+for i in range(1, num + 1):
+    fact *= i
+
+print(fact)
+9. Fibonacci Series
+
+Scenario:
+Generate numbers.
+
+n = 10
+
+a = 0
+b = 1
+
+for _ in range(n):
+    print(a, end=" ")
+    a, b = b, a + b
+
+Output:
+
+0 1 1 2 3 5 8 13 21 34
+10. Prime Number Check
+
+Scenario:
+Validate a number.
+
+num = 13
+
+is_prime = True
+
+for i in range(2, num):
+    if num % i == 0:
+        is_prime = False
+        break
+
+print(is_prime)
+11. Find Duplicate Elements
+
+Scenario:
+Duplicate records in data.
+
+nums = [1, 2, 3, 2, 5, 1]
+
+duplicates = []
+
+for n in nums:
+    if nums.count(n) > 1 and n not in duplicates:
+        duplicates.append(n)
+
+print(duplicates)
+12. Sort List Without sort()
+
+Scenario:
+Manual sorting logic.
+
+nums = [4, 2, 8, 1]
+
+for i in range(len(nums)):
+    for j in range(i + 1, len(nums)):
+        if nums[i] > nums[j]:
+            nums[i], nums[j] = nums[j], nums[i]
+
+print(nums)
+13. Second Largest Number
+
+Scenario:
+Find second highest marks.
+
+nums = [10, 20, 50, 30]
+
+nums = list(set(nums))
+nums.sort()
+
+print(nums[-2])
+14. Character Frequency
+
+Scenario:
+Password/text analysis.
+
+text = "banana"
+
+freq = {}
+
+for ch in text:
+    freq[ch] = freq.get(ch, 0) + 1
+
+print(freq)
+
+Output:
+
+{'b':1,'a':3,'n':2}
+15. Swap Two Variables
+
+Without temp variable:
+
+a = 10
+b = 20
+
+a, b = b, a
+
+print(a, b)
+16. Find Missing Number
+
+Scenario:
+Missing roll number.
+
+nums = [1, 2, 3, 5]
+
+n = 5
+
+expected = n * (n + 1) // 2
+actual = sum(nums)
+
+print(expected - actual)
+17. Common Elements
+
+Scenario:
+Common customers/products.
+
+a = [1, 2, 3, 4]
+b = [3, 4, 5]
+
+print(list(set(a) & set(b)))
+18. Count Digits
+num = 12345
+
+count = len(str(num))
+
+print(count)
+19. Sum of Digits
+num = 123
+
+total = 0
+
+for digit in str(num):
+    total += int(digit)
+
+print(total)
+20. Armstrong Number
+num = 153
+
+digits = str(num)
+
+total = 0
+
+for d in digits:
+    total += int(d) ** len(digits)
+
+print(total == num)
+Frequently Asked Basic Python Topics
+List vs Tuple
+Set vs Dictionary
+Mutable vs Immutable
+append() vs extend()
+is vs ==
+deepcopy vs copy
+break, continue, pass
+Lambda function
+map(), filter(), reduce()
+Exception handling (try-except)
+File handling
+OOP basics
+*args, **kwargs
+List comprehension
+String manipulation
+Dictionary methods
+Loops and conditions
+Functions and recursion
+=============================================================
+7.1. Find Duplicate Records
+
+Scenario:
+Customer table has duplicate emails.
+
+SELECT email, COUNT(*) AS count
+FROM customers
+GROUP BY email
+HAVING COUNT(*) > 1;
+2. Remove Duplicate Rows
+
+Scenario:
+Keep lowest ID, remove duplicates.
+
+DELETE c1
+FROM customers c1
+JOIN customers c2
+ON c1.email = c2.email
+AND c1.id > c2.id;
+3. Find Second Highest Salary
+
+Scenario:
+Employee salary ranking.
+
+SELECT MAX(salary) AS second_highest
+FROM employee
+WHERE salary <
+(
+    SELECT MAX(salary)
+    FROM employee
+);
+
+Using window function:
+
+SELECT salary
+FROM
+(
+    SELECT salary,
+           DENSE_RANK() OVER(
+               ORDER BY salary DESC
+           ) rnk
+    FROM employee
+) x
+WHERE rnk = 2;
+4. Nth Highest Salary
+
+Scenario: Find 5th highest salary.
+
+SELECT DISTINCT salary
+FROM employee
+ORDER BY salary DESC
+LIMIT 4,1;
+5. Row to Column (Pivot)
+
+Scenario: Convert city rows to columns.
+
+Table:
+
+city
+----
+Chennai
+Mumbai
+Delhi
+SELECT
+    SUM(CASE WHEN city='Chennai'
+             THEN 1 ELSE 0 END) Chennai,
+    SUM(CASE WHEN city='Mumbai'
+             THEN 1 ELSE 0 END) Mumbai,
+    SUM(CASE WHEN city='Delhi'
+             THEN 1 ELSE 0 END) Delhi
+FROM customer;
+6. Running Total
+
+Scenario: Running sales total.
+
+SELECT
+    id,
+    sales,
+    SUM(sales) OVER(
+        ORDER BY id
+    ) AS running_total
+FROM sales_table;
+7. Moving Average
+
+Scenario: Last 3 days average sales.
+
+SELECT
+    id,
+    sales,
+    AVG(sales) OVER(
+        ORDER BY id
+        ROWS BETWEEN 2 PRECEDING
+        AND CURRENT ROW
+    ) moving_avg
+FROM sales_table;
+8. Top 3 Employees Per Department
+
+Scenario: Highest performers.
+
+SELECT *
+FROM
+(
+    SELECT *,
+           ROW_NUMBER() OVER(
+               PARTITION BY department
+               ORDER BY salary DESC
+           ) rn
+    FROM employee
+) x
+WHERE rn <= 3;
+9. Employees with Salary Greater than Department Average
+
+Scenario: Salary benchmarking.
+
+SELECT name,
+       department,
+       salary
+FROM employee e
+WHERE salary >
+(
+    SELECT AVG(salary)
+    FROM employee
+    WHERE department = e.department
+);
+10. Consecutive Login Days
+
+Scenario: Detect active users.
+
+SELECT user_id,
+       login_date,
+       LAG(login_date)
+       OVER(
+         PARTITION BY user_id
+         ORDER BY login_date
+       ) prev_date
+FROM logins;
+11. Find Missing IDs
+
+Scenario: Missing invoice numbers.
+
+SELECT t1.id + 1 AS missing_id
+FROM orders t1
+LEFT JOIN orders t2
+ON t1.id + 1 = t2.id
+WHERE t2.id IS NULL;
+12. Delete Old Records
+
+Scenario: Delete logs older than 90 days.
+
+DELETE
+FROM logs
+WHERE created_date <
+DATE_SUB(NOW(),
+INTERVAL 90 DAY);
+13. Pagination
+
+Scenario: Display page 2 with 10 records.
+
+SELECT *
+FROM employee
+LIMIT 10 OFFSET 10;
+
+or
+
+SELECT *
+FROM employee
+LIMIT 10,10;
+14. Highest Salary by Department
+SELECT department,
+       MAX(salary)
+FROM employee
+GROUP BY department;
+15. Rank Employees
+SELECT
+    name,
+    salary,
+    DENSE_RANK()
+    OVER(
+      ORDER BY salary DESC
+    ) ranking
+FROM employee;
+16. Self Join (Manager Employee)
+
+Scenario: Find manager name.
+
+SELECT
+    e.name employee_name,
+    m.name manager_name
+FROM employee e
+LEFT JOIN employee m
+ON e.manager_id = m.id;
+17. Pivot Monthly Sales
+
+Scenario: Month becomes columns.
+
+SELECT
+SUM(CASE WHEN month='Jan'
+         THEN sales END) Jan,
+SUM(CASE WHEN month='Feb'
+         THEN sales END) Feb,
+SUM(CASE WHEN month='Mar'
+         THEN sales END) Mar
+FROM sales;
+18. Find Customers with No Orders
+SELECT c.*
+FROM customers c
+LEFT JOIN orders o
+ON c.id = o.customer_id
+WHERE o.id IS NULL;
+
