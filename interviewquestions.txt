@@ -1219,4 +1219,281 @@ FROM customers c
 LEFT JOIN orders o
 ON c.id = o.customer_id
 WHERE o.id IS NULL;
+========================================
+Types of MySQL Indexes
+Index Type	Purpose
+Primary Index	Unique identifier for a table
+Unique Index	Prevent duplicate values
+Normal (Simple) Index	Faster search
+Composite Index	Multiple columns
+Full-Text Index	Text searching
+Spatial Index	GIS/location data
+Clustered Index	Physical row storage order
+Non-Clustered Index	Separate lookup structure
+Covering Index	Query satisfied from index alone
+1. Primary Index (PRIMARY KEY)
 
+Used to uniquely identify a row.
+
+Properties:
+
+Unique
+Cannot be NULL
+One per table
+
+Table:
+
+CREATE TABLE employee (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    salary DECIMAL(10,2)
+);
+
+Query:
+
+SELECT *
+FROM employee
+WHERE id = 101;
+
+Fast lookup.
+
+Think: Aadhaar number / employee ID.
+
+2. Unique Index
+
+Prevents duplicates.
+
+Example:
+
+CREATE UNIQUE INDEX idx_email
+ON customers(email);
+
+Now duplicate email not allowed.
+
+Example:
+
+INSERT INTO customers(email)
+VALUES('abc@gmail.com');
+
+Duplicate insert:
+
+Duplicate entry error
+
+Use case:
+
+Email
+PAN
+Passport number
+3. Normal (Simple) Index
+
+Improves search performance.
+
+CREATE INDEX idx_name
+ON employee(name);
+
+Query:
+
+SELECT *
+FROM employee
+WHERE name='Ravi';
+
+Without index:
+
+Full table scan
+
+With index:
+
+Fast search
+4. Composite Index (Multi-column)
+
+Index on multiple columns.
+
+Example:
+
+CREATE INDEX idx_city_salary
+ON employee(city, salary);
+
+Works well for:
+
+SELECT *
+FROM employee
+WHERE city='Chennai'
+AND salary > 50000;
+
+Also works:
+
+WHERE city='Chennai'
+
+But not efficient:
+
+WHERE salary > 50000
+
+Because of leftmost prefix rule.
+
+Example:
+
+(city, salary)
+
+Efficient:
+
+city
+city + salary
+
+Not efficient:
+
+salary only
+5. Full-Text Index
+
+Search text efficiently.
+
+Example:
+
+CREATE FULLTEXT INDEX idx_desc
+ON products(description);
+
+Search:
+
+SELECT *
+FROM products
+WHERE MATCH(description)
+AGAINST('laptop');
+
+Used in:
+
+Search engines
+Blogs
+Product search
+6. Spatial Index
+
+Used for geographic data.
+
+Example:
+
+CREATE TABLE locations (
+    id INT PRIMARY KEY,
+    position POINT NOT NULL,
+    SPATIAL INDEX(position)
+);
+
+Use case:
+
+GPS
+Maps
+Nearby search
+7. Clustered Index
+
+In MySQL (MySQL InnoDB engine), primary key is clustered.
+
+Meaning:
+
+Table data stored physically in PK order.
+
+Example:
+
+PRIMARY KEY(id)
+
+Rows stored like:
+
+1
+2
+3
+4
+5
+
+Only one clustered index.
+
+Good for range queries:
+
+SELECT *
+FROM employee
+WHERE id BETWEEN 1 AND 100;
+8. Non-Clustered Index
+
+Separate structure from table.
+
+Example:
+
+CREATE INDEX idx_name
+ON employee(name);
+
+Stores:
+
+Ravi → pointer
+Priya → pointer
+Arun → pointer
+
+Then jumps to table row.
+
+Multiple allowed.
+
+9. Covering Index
+
+Index contains all required columns.
+
+Example:
+
+CREATE INDEX idx_cover
+ON employee(name, salary);
+
+Query:
+
+SELECT name, salary
+FROM employee
+WHERE name='Ravi';
+
+Database reads only index.
+
+No table access needed.
+
+Faster.
+
+10. Prefix Index
+
+Index first few characters.
+
+Example:
+
+CREATE INDEX idx_name_prefix
+ON employee(name(5));
+
+Indexes first 5 chars.
+
+Useful for long text.
+
+Check Existing Indexes
+SHOW INDEX
+FROM employee;
+Remove Index
+DROP INDEX idx_name
+ON employee;
+Interview Scenario Questions
+Q1: Query on email slow
+SELECT *
+FROM users
+WHERE email='abc@gmail.com';
+
+Answer:
+
+CREATE INDEX idx_email
+ON users(email);
+Q2: Query filters city and salary
+WHERE city='Chennai'
+AND salary > 50000
+
+Answer:
+
+CREATE INDEX idx_city_salary
+ON employee(city,salary);
+Q3: Search product description
+
+Answer:
+Use FULLTEXT INDEX.
+
+Q4: Why too many indexes are bad?
+
+Answer:
+
+Slower inserts
+Slower updates
+More storage
+Maintenance overhead
