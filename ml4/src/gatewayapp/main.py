@@ -5,6 +5,8 @@ import json
 import consul
 from fastapi import FastAPI, HTTPException, Request, Response
 
+from gatewayapp.dtos.order_request import OrderRequest
+
 app = FastAPI(
     title="API Gateway",
     description="API Gateway for microservices",
@@ -26,7 +28,9 @@ LOAD_BALANCERS = {}
 # payment-service-2 -> 8004
 ROUTING_TABLE = {
     ("POST", "payments"): "payment-service-1",
-    ("GET", "payments"): "payment-service-2"
+    ("GET", "payments"): "payment-service-2",
+    ("POST","orders"): "order-service-1",
+    ("GET", "orders"): "order-service-2"
 }
 
 
@@ -83,28 +87,44 @@ def get_service_instance(service_name: str):
 async def forward_request(
     service_url: str,
     resource: str,
-    order_id: int,
-    request: Request
+    order_id: int,    
+    request: Request,
+    order_request: OrderRequest = None,
 ):
-    target_url = f"{service_url}/{resource}"
+    # add trailing slash to avoid 307 redirect
+    target_url = f"{service_url}/{resource}/"
+    print(f"Forwarding request to: {target_url}")
 
-    try:
-        request_body = await request.json()
-    except json.JSONDecodeError:
+    headers = {
+        key: value
+        for key, value in request.headers.items()
+        if key.lower() not in ["host", "content-length"]
+    }
+    if order_request is not None:
+        request_body =order_request
+    else:
         request_body = {}
 
-    request_body["order_id"] = order_id
+    # handle request body for POST/PUT/PATCH
+    if request.method.upper() in ["POST", "PUT", "PATCH"]:
+        try:
+            request_body = await request.json()
+        except Exception:
+            request_body = {}
 
-    async with httpx.AsyncClient() as client:
+        # inject order_id if available
+        if order_id > 0:
+            request_body["order_id"] = order_id
+
+    async with httpx.AsyncClient(
+        follow_redirects=True
+    ) as client:
+
         response = await client.request(
             method=request.method,
             url=target_url,
             json=request_body,
-            headers={
-                key: value
-                for key, value in request.headers.items()
-                if key.lower() not in ["host", "content-length"]
-            }
+            headers=headers
         )
 
     return Response(
@@ -112,7 +132,6 @@ async def forward_request(
         status_code=response.status_code,
         media_type=response.headers.get("content-type")
     )
-
 
 @app.get("/")
 def home():
@@ -139,4 +158,37 @@ async def create_payment_gateway(order_id: int, request: Request):
         request=request
     )
 
+@app.get("/payments")
+async def get_payment_gateway(request: Request):
+    service_name = route_engine("GET", "payments")
+    service_url = get_service_instance(service_name)
 
+    return await forward_request(
+        service_url=service_url,
+        resource="payments",  
+        order_id=0,      
+        request=request
+    )
+@app.post("/orders")
+async def create_order_gateway(order_request: OrderRequest, request: Request):
+    service_name = route_engine("POST", "orders")
+    service_url = get_service_instance(service_name)
+
+    return await forward_request(
+        service_url=service_url,
+        resource="orders",
+        order_id=0,
+        request=request,
+        order_request=order_request.model_dump()
+    )
+@app.get("/orders")
+async def get_order_gateway(request: Request):
+    service_name = route_engine("GET", "orders")
+    service_url = get_service_instance(service_name)
+
+    return await forward_request(
+        service_url=service_url,
+        resource="orders",  
+        order_id=0,      
+        request=request
+    )
