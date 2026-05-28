@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 import pika
 import json
+import threading
 from driverapp.configurations.config import RABBITMQ_URL
 '''
 params = pika.URLParameters(RABBITMQ_URL)
@@ -39,4 +40,11 @@ def rabbitmq_consumer():
     channel.basic_consume(queue='ride_requests', on_message_callback=process_message)
     print("Waiting for messages. To exit press CTRL+C")
     channel.start_consuming()
+
+@app.on_event("startup")
+def start_up_event():
+    #create background thread to consume messages from RabbitMQ
+    threading.Thread(target=rabbitmq_consumer, daemon=True).start()
+
+
 
