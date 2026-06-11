@@ -1,0 +1,2 @@
+#deploy the model 
+mlflow models serve -m models:/LoanApprovalPipelineModel/1 -p 5001 --no-conda
