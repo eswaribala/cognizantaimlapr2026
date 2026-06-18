@@ -1,0 +1,13 @@
+https://cognizantaimlapr2026.onrender.com/docs
+
+GET https://api.escuelajs.co/api/v1/products/82
+
+POST https://api.escuelajs.co/api/v1/products/
+
+{
+  "title": "New Product  1112",
+  "price": 10,
+  "description": "A description",
+  "categoryId": 1,
+  "images": ["https://placehold.co/600x400"]
+}
